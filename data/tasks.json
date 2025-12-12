@@ -1,0 +1,703 @@
+{
+  "tasks": [
+    {
+      "id": "e72058d6-f6af-41d5-b05a-6c13cf483a93",
+      "name": "Setup Backend Project Structure & Configuration",
+      "description": "Create the foundational Python backend structure with proper configuration management, logging setup, and dependency management. Establish the core project architecture following documented standards.",
+      "notes": "Foundation task for Track 1 - must be completed before any other backend tasks. Establishes coding standards and architectural patterns.",
+      "status": "pending",
+      "dependencies": [],
+      "createdAt": "2025-12-12T16:45:53.202Z",
+      "updatedAt": "2025-12-12T16:45:53.202Z",
+      "relatedFiles": [
+        {
+          "path": "backend/main.py",
+          "type": "CREATE",
+          "description": "Application entry point with proper logging and configuration loading"
+        },
+        {
+          "path": "backend/config.py",
+          "type": "CREATE",
+          "description": "Centralized configuration constants for time scaling, physics, and thresholds"
+        },
+        {
+          "path": "backend/utils.py",
+          "type": "CREATE",
+          "description": "Shared utility functions and helper methods"
+        },
+        {
+          "path": "backend/requirements.txt",
+          "type": "CREATE",
+          "description": "Python dependencies specification"
+        }
+      ],
+      "implementationGuide": "Create backend/ directory with main.py entry point, config.py for all constants (time scaling, physics parameters, thresholds), utils.py for shared utilities, and requirements.txt with dependencies: paho-mqtt, firebase-admin, scikit-learn, pandas, numpy. Setup Python logging configuration with appropriate log levels. Implement basic project structure validation and configuration loading mechanisms.",
+      "verificationCriteria": "Backend directory structure created with all required files. Configuration constants properly defined matching documentation values. Requirements.txt includes all specified dependencies. Logging configured properly without print statements. Code follows type annotation standards.",
+      "analysisResult": "Smart Green IoT Farm Simulation - Complete implementation of educational IoT system demonstrating accelerated time simulation, real-time MQTT telemetry, Firebase persistence, and predictive ML analytics through three parallel development tracks."
+    },
+    {
+      "id": "75ca7c19-b5b8-4d3b-92e2-35afcaa7a109",
+      "name": "Implement Physics Engine Core",
+      "description": "Develop the core physics simulation engine that handles accelerated time scaling, temperature modeling, moisture dynamics, and day/night cycles according to specified mathematical models.",
+      "notes": "Critical component containing all environmental simulation logic. Requires precise mathematical implementation matching documentation specifications.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "e72058d6-f6af-41d5-b05a-6c13cf483a93"
+        }
+      ],
+      "createdAt": "2025-12-12T16:45:53.202Z",
+      "updatedAt": "2025-12-12T16:45:53.202Z",
+      "relatedFiles": [
+        {
+          "path": "backend/physics_engine.py",
+          "type": "CREATE",
+          "description": "Core physics simulation with time scaling, temperature, moisture, and light models"
+        },
+        {
+          "path": "backend/config.py",
+          "type": "TO_MODIFY",
+          "description": "Physics constants and parameters"
+        }
+      ],
+      "implementationGuide": "Implement physics_engine.py with TimeManager class for 1:6 time scaling, TemperatureModel using sinusoidal curve T=20+10*sin(time_offset), MoistureSystem with base evaporation (0.5%/tick), heat stress multiplier (2x >35°C), and sprinkler effects (+3%/tick). Include DayNightCycle class for 06:00-18:00 day periods. All calculations must use configuration constants and include proper error handling.",
+      "verificationCriteria": "Physics engine correctly implements 1:6 time scaling ratio. Temperature follows sinusoidal curve with peak at 14:00. Moisture evaporation implements base rate and heat stress multiplier. Day/night cycle toggles correctly at 06:00 and 18:00. All calculations use config constants. Comprehensive type annotations and docstrings included.",
+      "analysisResult": "Smart Green IoT Farm Simulation - Complete implementation of educational IoT system demonstrating accelerated time simulation, real-time MQTT telemetry, Firebase persistence, and predictive ML analytics through three parallel development tracks."
+    },
+    {
+      "id": "9350f222-0cd6-4ec9-8727-e235a74c62bc",
+      "name": "Develop ML Prediction System",
+      "description": "Create the machine learning predictor using Linear Regression to forecast when soil moisture will reach critical threshold (30%), with rolling data buffer management and prediction formatting.",
+      "notes": "Educational ML component demonstrating predictive analytics in IoT systems. Must handle edge cases gracefully and provide meaningful predictions.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "e72058d6-f6af-41d5-b05a-6c13cf483a93"
+        }
+      ],
+      "createdAt": "2025-12-12T16:45:53.202Z",
+      "updatedAt": "2025-12-12T16:45:53.202Z",
+      "relatedFiles": [
+        {
+          "path": "backend/ml_predictor.py",
+          "type": "CREATE",
+          "description": "Linear regression model for moisture prediction with rolling buffer management"
+        },
+        {
+          "path": "backend/config.py",
+          "type": "TO_MODIFY",
+          "description": "ML configuration parameters and thresholds"
+        }
+      ],
+      "implementationGuide": "Implement ml_predictor.py with MLPredictor class using scikit-learn LinearRegression. Maintain rolling buffer of (time_index, moisture_level) tuples. Retrain model every virtual hour (10 real seconds). Predict when moisture reaches 30% threshold and format as 'Xh Ym' string. Include error handling for insufficient data and edge cases. Buffer should reset at virtual day boundaries to prevent memory accumulation.",
+      "verificationCriteria": "ML predictor successfully trains Linear Regression model on time-series data. Rolling buffer correctly manages data points and clears at day boundaries. Prediction accurately calculates time to 30% moisture threshold. Output formatted as readable time string. Error handling for insufficient data implemented. Model retraining occurs every virtual hour.",
+      "analysisResult": "Smart Green IoT Farm Simulation - Complete implementation of educational IoT system demonstrating accelerated time simulation, real-time MQTT telemetry, Firebase persistence, and predictive ML analytics through three parallel development tracks."
+    },
+    {
+      "id": "4d98868a-0a40-436e-a026-93e1795a8d3c",
+      "name": "Build MQTT Communication Client",
+      "description": "Implement MQTT publisher client that broadcasts telemetry data at 1Hz frequency to public broker with proper error handling and connection management.",
+      "notes": "Real-time telemetry component critical for frontend visualization. Must maintain 1Hz publication rate and handle network failures gracefully.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "e72058d6-f6af-41d5-b05a-6c13cf483a93"
+        }
+      ],
+      "createdAt": "2025-12-12T16:45:53.202Z",
+      "updatedAt": "2025-12-12T16:45:53.202Z",
+      "relatedFiles": [
+        {
+          "path": "backend/mqtt_client.py",
+          "type": "CREATE",
+          "description": "MQTT publisher with connection management and telemetry broadcasting"
+        },
+        {
+          "path": "backend/config.py",
+          "type": "TO_MODIFY",
+          "description": "MQTT broker configuration and topic settings"
+        }
+      ],
+      "implementationGuide": "Create mqtt_client.py with MQTTPublisher class using paho-mqtt library. Connect to public broker (broker.hivemq.com or test.mosquitto.org) on topic cs335/bese13ab/sensor_data. Publish JSON payload every second with exact schema: moisture, temperature, light_intensity, hour, minute, time_str, day_progress, is_day, prediction, sprinkler_on. Implement connection retry logic, graceful disconnect handling, and logging for all connection events.",
+      "verificationCriteria": "MQTT client successfully connects to public broker. Publishes telemetry data at exactly 1Hz frequency. JSON payload matches documented schema exactly. Connection retry logic works for network failures. Graceful shutdown and reconnection implemented. All network events properly logged.",
+      "analysisResult": "Smart Green IoT Farm Simulation - Complete implementation of educational IoT system demonstrating accelerated time simulation, real-time MQTT telemetry, Firebase persistence, and predictive ML analytics through three parallel development tracks."
+    },
+    {
+      "id": "d76ef09f-18a8-4ede-b71e-5d28dadf4e70",
+      "name": "Create Firebase Integration Client",
+      "description": "Develop Firebase Realtime Database client for reading actuator states and writing historical logs with proper authentication and error handling.",
+      "notes": "Persistent storage component for actuator control and historical data. Requires Firebase project setup and service account credentials.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "e72058d6-f6af-41d5-b05a-6c13cf483a93"
+        }
+      ],
+      "createdAt": "2025-12-12T16:45:53.202Z",
+      "updatedAt": "2025-12-12T16:45:53.202Z",
+      "relatedFiles": [
+        {
+          "path": "backend/firebase_client.py",
+          "type": "CREATE",
+          "description": "Firebase integration for actuator control and historical logging"
+        },
+        {
+          "path": "backend/config.py",
+          "type": "TO_MODIFY",
+          "description": "Firebase project configuration and database paths"
+        }
+      ],
+      "implementationGuide": "Implement firebase_client.py with FirebaseClient class using firebase-admin SDK. Setup authentication with service account credentials. Implement read operations for plant_monitor/actuators/ branch (sprinkler_state, grow_light_state, fan_state). Implement write operations for plant_monitor/history_log/ with push() method for unique IDs. Write historical data every virtual hour (10 real seconds). Include retry logic for network failures and proper error logging.",
+      "verificationCriteria": "Firebase client authenticates successfully with service account. Reads actuator states from correct database paths. Writes historical logs with proper structure and timing. Network error handling and retry logic implemented. All database operations logged appropriately.",
+      "analysisResult": "Smart Green IoT Farm Simulation - Complete implementation of educational IoT system demonstrating accelerated time simulation, real-time MQTT telemetry, Firebase persistence, and predictive ML analytics through three parallel development tracks."
+    },
+    {
+      "id": "17e3965c-63e6-4b2d-b7fb-654c13565ffb",
+      "name": "Integrate Backend Main Loop",
+      "description": "Develop the main application loop that orchestrates physics simulation, ML predictions, MQTT publishing, and Firebase synchronization with proper timing and error isolation.",
+      "notes": "Central orchestration component that ties all backend systems together. Critical for system reliability and proper timing coordination.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "75ca7c19-b5b8-4d3b-92e2-35afcaa7a109"
+        },
+        {
+          "taskId": "9350f222-0cd6-4ec9-8727-e235a74c62bc"
+        },
+        {
+          "taskId": "4d98868a-0a40-436e-a026-93e1795a8d3c"
+        },
+        {
+          "taskId": "d76ef09f-18a8-4ede-b71e-5d28dadf4e70"
+        }
+      ],
+      "createdAt": "2025-12-12T16:45:53.202Z",
+      "updatedAt": "2025-12-12T16:45:53.202Z",
+      "relatedFiles": [
+        {
+          "path": "backend/main.py",
+          "type": "TO_MODIFY",
+          "description": "Main simulation loop integrating all backend components"
+        },
+        {
+          "path": "backend/physics_engine.py",
+          "type": "DEPENDENCY",
+          "description": "Physics simulation components"
+        },
+        {
+          "path": "backend/ml_predictor.py",
+          "type": "DEPENDENCY",
+          "description": "ML prediction system"
+        },
+        {
+          "path": "backend/mqtt_client.py",
+          "type": "DEPENDENCY",
+          "description": "MQTT communication"
+        },
+        {
+          "path": "backend/firebase_client.py",
+          "type": "DEPENDENCY",
+          "description": "Firebase integration"
+        }
+      ],
+      "implementationGuide": "Enhance main.py with MainSimulation class that coordinates all backend components. Implement 1-second simulation loop with physics updates, ML retraining (every virtual hour), MQTT publishing (every tick), and Firebase operations (hourly historical writes, continuous actuator reads). Include graceful shutdown handling, component error isolation (one failure shouldn't crash entire system), and comprehensive logging. Add command-line interface for starting/stopping simulation.",
+      "verificationCriteria": "Main loop successfully orchestrates all backend components. 1-second timing maintained accurately. Error isolation prevents component failures from crashing system. Graceful shutdown implemented. Command-line interface functional. All operations properly logged. System can run continuously for multiple virtual day cycles.",
+      "analysisResult": "Smart Green IoT Farm Simulation - Complete implementation of educational IoT system demonstrating accelerated time simulation, real-time MQTT telemetry, Firebase persistence, and predictive ML analytics through three parallel development tracks."
+    },
+    {
+      "id": "26fce802-fbc8-4769-881b-74efc5377bbe",
+      "name": "Setup Frontend Project Structure",
+      "description": "Create the foundational frontend structure with HTML5 dashboard, modular CSS architecture, and JavaScript module organization following documented standards.",
+      "notes": "Foundation task for Track 2 - establishes frontend architecture and file organization. Must be completed before other frontend tasks.",
+      "status": "pending",
+      "dependencies": [],
+      "createdAt": "2025-12-12T16:45:53.202Z",
+      "updatedAt": "2025-12-12T16:45:53.202Z",
+      "relatedFiles": [
+        {
+          "path": "frontend/index.html",
+          "type": "CREATE",
+          "description": "Main dashboard HTML with semantic structure"
+        },
+        {
+          "path": "frontend/css/styles.css",
+          "type": "CREATE",
+          "description": "Primary stylesheet with responsive design"
+        },
+        {
+          "path": "frontend/css/animations.css",
+          "type": "CREATE",
+          "description": "Sky gradient and sun movement animations"
+        },
+        {
+          "path": "frontend/css/components.css",
+          "type": "CREATE",
+          "description": "UI component styles and layouts"
+        },
+        {
+          "path": "frontend/js/main.js",
+          "type": "CREATE",
+          "description": "Application initialization and module coordination"
+        },
+        {
+          "path": "frontend/assets/",
+          "type": "CREATE",
+          "description": "Directory for plant health images and other assets"
+        }
+      ],
+      "implementationGuide": "Create frontend/ directory with index.html as main dashboard, css/ subdirectory containing styles.css (main styles), animations.css (sky/sun animations), components.css (UI components). Create js/ subdirectory with main.js (app initialization), mqtt_handler.js, firebase_handler.js, ui_controller.js, animations.js. Create assets/ directory for plant images. Setup proper HTML5 structure with semantic markup and responsive viewport configuration.",
+      "verificationCriteria": "Frontend directory structure created with all required files and subdirectories. HTML5 semantic markup implemented with proper viewport configuration. CSS modular architecture established. JavaScript module structure created with clear separation of concerns. Assets directory prepared for image resources.",
+      "analysisResult": "Smart Green IoT Farm Simulation - Complete implementation of educational IoT system demonstrating accelerated time simulation, real-time MQTT telemetry, Firebase persistence, and predictive ML analytics through three parallel development tracks."
+    },
+    {
+      "id": "2f587e89-37b4-4d94-b955-7152e955deef",
+      "name": "Develop MQTT WebSocket Handler",
+      "description": "Create JavaScript MQTT client using WebSocket connection to subscribe to telemetry data from backend with real-time data processing and error handling.",
+      "notes": "Critical real-time data component enabling frontend visualization. Must maintain reliable connection and handle network interruptions gracefully.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "26fce802-fbc8-4769-881b-74efc5377bbe"
+        }
+      ],
+      "createdAt": "2025-12-12T16:45:53.202Z",
+      "updatedAt": "2025-12-12T16:45:53.202Z",
+      "relatedFiles": [
+        {
+          "path": "frontend/js/mqtt_handler.js",
+          "type": "CREATE",
+          "description": "MQTT WebSocket client for real-time telemetry subscription"
+        },
+        {
+          "path": "frontend/index.html",
+          "type": "TO_MODIFY",
+          "description": "Include MQTT library CDN and connection status indicators"
+        }
+      ],
+      "implementationGuide": "Implement mqtt_handler.js using Paho MQTT JavaScript library over WebSockets. Connect to same broker as backend but using WebSocket port (typically 8000). Subscribe to cs335/bese13ab/sensor_data topic. Parse incoming JSON telemetry and trigger UI updates. Implement connection retry logic, connection status indicators, and proper error handling for network issues. Include message validation to ensure data integrity.",
+      "verificationCriteria": "MQTT WebSocket client successfully connects to broker. Subscribes to correct telemetry topic. Parses JSON messages and validates data structure. Connection retry logic handles network failures. Connection status visible to users. Message processing triggers appropriate UI updates.",
+      "analysisResult": "Smart Green IoT Farm Simulation - Complete implementation of educational IoT system demonstrating accelerated time simulation, real-time MQTT telemetry, Firebase persistence, and predictive ML analytics through three parallel development tracks."
+    },
+    {
+      "id": "3dda579c-4e79-467b-b729-7dabf8b730ea",
+      "name": "Implement Firebase Web Integration",
+      "description": "Develop JavaScript Firebase client for writing actuator commands and reading historical data using Firebase Web SDK with proper authentication and error handling.",
+      "notes": "Bidirectional data component enabling user control and historical data visualization. Requires Firebase web app configuration.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "26fce802-fbc8-4769-881b-74efc5377bbe"
+        }
+      ],
+      "createdAt": "2025-12-12T16:45:53.202Z",
+      "updatedAt": "2025-12-12T16:45:53.202Z",
+      "relatedFiles": [
+        {
+          "path": "frontend/js/firebase_handler.js",
+          "type": "CREATE",
+          "description": "Firebase Web SDK integration for actuator control and data retrieval"
+        },
+        {
+          "path": "frontend/index.html",
+          "type": "TO_MODIFY",
+          "description": "Include Firebase SDK CDN links"
+        }
+      ],
+      "implementationGuide": "Create firebase_handler.js using Firebase Web SDK. Configure Firebase project connection with web app credentials. Implement writeActuatorState() function to update plant_monitor/actuators/ branch when users interact with controls. Implement readHistoricalData() for displaying environmental trends. Include proper error handling, connection status monitoring, and retry logic for Firebase operations. Add real-time listeners for actuator state changes.",
+      "verificationCriteria": "Firebase Web SDK successfully connects to project. Actuator state updates write correctly to database. Historical data retrieval functions properly. Real-time listeners respond to database changes. Error handling manages network and authentication issues. Connection status monitoring implemented.",
+      "analysisResult": "Smart Green IoT Farm Simulation - Complete implementation of educational IoT system demonstrating accelerated time simulation, real-time MQTT telemetry, Firebase persistence, and predictive ML analytics through three parallel development tracks."
+    },
+    {
+      "id": "7966f956-e61d-4251-befc-7a34d9d63f24",
+      "name": "Create Digital Twin Visualization Engine",
+      "description": "Develop the core visual components including sky gradient animations, sun/moon movement, and plant health state visualization synchronized with telemetry data.",
+      "notes": "Core visual component creating the 'Digital Twin' experience. Animations must be smooth and synchronized with real-time data updates.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "26fce802-fbc8-4769-881b-74efc5377bbe"
+        },
+        {
+          "taskId": "2f587e89-37b4-4d94-b955-7152e955deef"
+        }
+      ],
+      "createdAt": "2025-12-12T16:45:53.202Z",
+      "updatedAt": "2025-12-12T16:45:53.202Z",
+      "relatedFiles": [
+        {
+          "path": "frontend/js/animations.js",
+          "type": "CREATE",
+          "description": "Sky, celestial body, and plant health visualization engine"
+        },
+        {
+          "path": "frontend/css/animations.css",
+          "type": "TO_MODIFY",
+          "description": "Animation keyframes and transition styles"
+        },
+        {
+          "path": "frontend/assets/plant_healthy.png",
+          "type": "CREATE",
+          "description": "Healthy plant image asset"
+        },
+        {
+          "path": "frontend/assets/plant_sagging.png",
+          "type": "CREATE",
+          "description": "Sagging plant image asset"
+        },
+        {
+          "path": "frontend/assets/plant_dead.png",
+          "type": "CREATE",
+          "description": "Dead/wilted plant image asset"
+        }
+      ],
+      "implementationGuide": "Implement animations.js with SkyController class for CSS gradient transitions (blue day → black night based on day_progress), CelestialBody class for sun/moon arc movement across screen, and PlantHealthVisualizer for dynamic image switching (healthy/sagging/dead based on moisture thresholds). Use CSS custom properties for smooth transitions. Implement requestAnimationFrame for smooth animations and proper performance. Include fallback mechanisms for older browsers.",
+      "verificationCriteria": "Sky gradient smoothly transitions based on day_progress values. Sun/moon movement follows realistic arc trajectory. Plant images change appropriately at moisture thresholds (50%, 30%). Animations perform smoothly without performance issues. CSS transitions provide smooth visual feedback. Browser compatibility maintained.",
+      "analysisResult": "Smart Green IoT Farm Simulation - Complete implementation of educational IoT system demonstrating accelerated time simulation, real-time MQTT telemetry, Firebase persistence, and predictive ML analytics through three parallel development tracks."
+    },
+    {
+      "id": "93bae433-3bc7-4fe1-a9e5-dd988c7ef7aa",
+      "name": "Build Interactive Dashboard Controls",
+      "description": "Create user interface controls for actuator management (sprinkler, lights, fan) with visual feedback, data displays, and alert systems for critical conditions.",
+      "notes": "Primary user interaction component enabling control of the simulation. Must provide clear feedback and intuitive operation.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "26fce802-fbc8-4769-881b-74efc5377bbe"
+        },
+        {
+          "taskId": "3dda579c-4e79-467b-b729-7dabf8b730ea"
+        },
+        {
+          "taskId": "2f587e89-37b4-4d94-b955-7152e955deef"
+        }
+      ],
+      "createdAt": "2025-12-12T16:45:53.202Z",
+      "updatedAt": "2025-12-12T16:45:53.202Z",
+      "relatedFiles": [
+        {
+          "path": "frontend/js/ui_controller.js",
+          "type": "CREATE",
+          "description": "Interactive dashboard controls and user interface management"
+        },
+        {
+          "path": "frontend/css/components.css",
+          "type": "TO_MODIFY",
+          "description": "Control button styles and visual feedback states"
+        },
+        {
+          "path": "frontend/index.html",
+          "type": "TO_MODIFY",
+          "description": "Interactive control elements and data display panels"
+        }
+      ],
+      "implementationGuide": "Implement ui_controller.js with DashboardController class managing interactive elements. Create toggle buttons for actuators with visual state feedback (active/inactive styles). Implement data display panels showing current temperature, moisture, time, and ML prediction. Create alert system for critical moisture levels (<30%) with visual indicators and notifications. Include sprinkler visual effects (water animation) when active. Ensure all controls are keyboard accessible and responsive.",
+      "verificationCriteria": "Actuator controls successfully update Firebase database. Visual feedback clearly indicates active/inactive states. Data displays update in real-time with telemetry. Alert system activates at proper thresholds. Sprinkler visual effects display when active. Controls are keyboard accessible and responsive. User interactions provide immediate visual feedback.",
+      "analysisResult": "Smart Green IoT Farm Simulation - Complete implementation of educational IoT system demonstrating accelerated time simulation, real-time MQTT telemetry, Firebase persistence, and predictive ML analytics through three parallel development tracks."
+    },
+    {
+      "id": "638e0b57-8a98-4feb-a9d8-b57dbb5950be",
+      "name": "Integrate Frontend Application Coordination",
+      "description": "Develop the main application coordinator that initializes all frontend modules, manages application state, and coordinates data flow between MQTT, Firebase, and UI components.",
+      "notes": "Central coordination component ensuring smooth operation of all frontend systems. Critical for application reliability and user experience.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "7966f956-e61d-4251-befc-7a34d9d63f24"
+        },
+        {
+          "taskId": "93bae433-3bc7-4fe1-a9e5-dd988c7ef7aa"
+        }
+      ],
+      "createdAt": "2025-12-12T16:45:53.202Z",
+      "updatedAt": "2025-12-12T16:45:53.202Z",
+      "relatedFiles": [
+        {
+          "path": "frontend/js/main.js",
+          "type": "TO_MODIFY",
+          "description": "Application coordinator integrating all frontend modules"
+        },
+        {
+          "path": "frontend/js/mqtt_handler.js",
+          "type": "DEPENDENCY",
+          "description": "MQTT telemetry handling"
+        },
+        {
+          "path": "frontend/js/firebase_handler.js",
+          "type": "DEPENDENCY",
+          "description": "Firebase integration"
+        },
+        {
+          "path": "frontend/js/ui_controller.js",
+          "type": "DEPENDENCY",
+          "description": "UI controls management"
+        },
+        {
+          "path": "frontend/js/animations.js",
+          "type": "DEPENDENCY",
+          "description": "Visualization engine"
+        }
+      ],
+      "implementationGuide": "Enhance main.js with AppCoordinator class that initializes all frontend modules in proper sequence. Implement application state management coordinating MQTT telemetry updates with UI refreshes. Create error boundary system preventing component failures from crashing entire application. Add application lifecycle management (startup, shutdown, reconnection). Implement performance monitoring and optimization for smooth 1Hz data updates. Include debugging modes and development tools integration.",
+      "verificationCriteria": "Application successfully initializes all modules in correct order. State management coordinates data flow between components. Error boundaries prevent component failures from system crash. Performance maintains smooth updates with 1Hz telemetry. Application lifecycle properly managed. Development tools and debugging features functional.",
+      "analysisResult": "Smart Green IoT Farm Simulation - Complete implementation of educational IoT system demonstrating accelerated time simulation, real-time MQTT telemetry, Firebase persistence, and predictive ML analytics through three parallel development tracks."
+    },
+    {
+      "id": "1cba5ab8-d5f8-4852-99c5-241a5edadcae",
+      "name": "Establish Testing Infrastructure",
+      "description": "Create comprehensive testing framework with pytest configuration, test directory structure, and testing utilities for backend components and integration scenarios.",
+      "notes": "Foundation for Track 3 - establishes testing standards and infrastructure. Critical for ensuring system reliability and maintainability.",
+      "status": "pending",
+      "dependencies": [],
+      "createdAt": "2025-12-12T16:45:53.202Z",
+      "updatedAt": "2025-12-12T16:45:53.202Z",
+      "relatedFiles": [
+        {
+          "path": "tests/pytest.ini",
+          "type": "CREATE",
+          "description": "Pytest configuration with coverage settings"
+        },
+        {
+          "path": "tests/test_physics.py",
+          "type": "CREATE",
+          "description": "Physics engine unit tests"
+        },
+        {
+          "path": "tests/test_ml.py",
+          "type": "CREATE",
+          "description": "ML predictor unit tests"
+        },
+        {
+          "path": "tests/test_mqtt.py",
+          "type": "CREATE",
+          "description": "MQTT client unit tests"
+        },
+        {
+          "path": "tests/test_firebase.py",
+          "type": "CREATE",
+          "description": "Firebase integration unit tests"
+        },
+        {
+          "path": "tests/test_integration.py",
+          "type": "CREATE",
+          "description": "End-to-end integration tests"
+        },
+        {
+          "path": "tests/conftest.py",
+          "type": "CREATE",
+          "description": "Pytest fixtures and testing utilities"
+        }
+      ],
+      "implementationGuide": "Create tests/ directory with pytest configuration (pytest.ini or pyproject.toml). Implement test_physics.py for physics engine validation, test_ml.py for ML predictor testing, test_mqtt.py for MQTT client testing, test_firebase.py for Firebase integration testing, and test_integration.py for end-to-end scenarios. Create testing utilities including mock MQTT broker, mock Firebase database, and test data generators. Setup code coverage reporting with pytest-cov targeting >80% coverage.",
+      "verificationCriteria": "Testing directory structure created with all required test files. Pytest configuration includes coverage reporting and proper test discovery. Testing utilities and mock services implemented. Test framework can execute all test categories. Code coverage reporting functional and targeting >80% threshold.",
+      "analysisResult": "Smart Green IoT Farm Simulation - Complete implementation of educational IoT system demonstrating accelerated time simulation, real-time MQTT telemetry, Firebase persistence, and predictive ML analytics through three parallel development tracks."
+    },
+    {
+      "id": "b544756c-0cce-4ad4-8f22-56222fc5e5b1",
+      "name": "Develop Physics Engine Test Suite",
+      "description": "Create comprehensive unit tests for physics engine components including time scaling, temperature curves, moisture dynamics, and day/night cycles with edge case coverage.",
+      "notes": "Critical testing component ensuring physics accuracy. Must validate all mathematical models against documented specifications with high precision.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "1cba5ab8-d5f8-4852-99c5-241a5edadcae"
+        },
+        {
+          "taskId": "75ca7c19-b5b8-4d3b-92e2-35afcaa7a109"
+        }
+      ],
+      "createdAt": "2025-12-12T16:45:53.202Z",
+      "updatedAt": "2025-12-12T16:45:53.202Z",
+      "relatedFiles": [
+        {
+          "path": "tests/test_physics.py",
+          "type": "TO_MODIFY",
+          "description": "Comprehensive physics engine test suite"
+        },
+        {
+          "path": "backend/physics_engine.py",
+          "type": "REFERENCE",
+          "description": "Physics engine implementation to test"
+        },
+        {
+          "path": "tests/conftest.py",
+          "type": "TO_MODIFY",
+          "description": "Physics testing fixtures and utilities"
+        }
+      ],
+      "implementationGuide": "Implement detailed test cases for TimeManager (1:6 scaling validation), TemperatureModel (sinusoidal curve accuracy, peak timing at 14:00, noise bounds), MoistureSystem (base evaporation rates, heat stress multiplier activation >35°C, sprinkler effects, boundary clamping), and DayNightCycle (transition timing, light intensity calculations). Include edge cases: extreme temperatures, boundary moisture values, time wraparound scenarios. Use parameterized tests for multiple data points and property-based testing where applicable.",
+      "verificationCriteria": "All physics calculations tested with mathematical precision. Time scaling accuracy validated across multiple scenarios. Temperature curve matches sinusoidal model within tolerance. Moisture dynamics correctly implement all documented rules. Day/night transitions occur at exact specified times. Edge cases handled appropriately. Test coverage >90% for physics module.",
+      "analysisResult": "Smart Green IoT Farm Simulation - Complete implementation of educational IoT system demonstrating accelerated time simulation, real-time MQTT telemetry, Firebase persistence, and predictive ML analytics through three parallel development tracks."
+    },
+    {
+      "id": "b15fc8ea-4989-4605-adef-21489af80cea",
+      "name": "Build ML Prediction Test Framework",
+      "description": "Develop unit tests for ML predictor including model training, prediction accuracy, edge case handling, and buffer management with synthetic data validation.",
+      "notes": "ML testing requires synthetic data generation and prediction accuracy validation. Must ensure reliable performance across various data scenarios.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "1cba5ab8-d5f8-4852-99c5-241a5edadcae"
+        },
+        {
+          "taskId": "9350f222-0cd6-4ec9-8727-e235a74c62bc"
+        }
+      ],
+      "createdAt": "2025-12-12T16:45:53.202Z",
+      "updatedAt": "2025-12-12T16:45:53.202Z",
+      "relatedFiles": [
+        {
+          "path": "tests/test_ml.py",
+          "type": "TO_MODIFY",
+          "description": "ML predictor comprehensive test suite"
+        },
+        {
+          "path": "backend/ml_predictor.py",
+          "type": "REFERENCE",
+          "description": "ML predictor implementation to test"
+        },
+        {
+          "path": "tests/conftest.py",
+          "type": "TO_MODIFY",
+          "description": "ML testing fixtures and synthetic data generators"
+        }
+      ],
+      "implementationGuide": "Create test cases for MLPredictor training with known datasets, prediction accuracy validation using synthetic moisture decline curves, edge case testing (insufficient data, flat curves, rapid changes), buffer management (rolling window, day boundary resets), and prediction formatting validation. Generate synthetic test data with known outcomes for prediction verification. Include performance testing for training time and memory usage. Test model behavior with various data patterns and noise levels.",
+      "verificationCriteria": "ML model training validated with synthetic datasets. Prediction accuracy meets acceptable thresholds. Edge cases (insufficient data, anomalies) handled gracefully. Buffer management correctly maintains rolling window and resets. Prediction output format matches specification. Performance tests confirm acceptable training times. Memory usage remains bounded during operation.",
+      "analysisResult": "Smart Green IoT Farm Simulation - Complete implementation of educational IoT system demonstrating accelerated time simulation, real-time MQTT telemetry, Firebase persistence, and predictive ML analytics through three parallel development tracks."
+    },
+    {
+      "id": "520262e8-c203-4432-84ad-66f24b6e99bd",
+      "name": "Create Communication Protocol Tests",
+      "description": "Implement test suites for MQTT and Firebase communication including connection handling, data validation, error scenarios, and network resilience testing.",
+      "notes": "Network communication testing requires mock services and failure simulation. Critical for ensuring system resilience in real deployment scenarios.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "1cba5ab8-d5f8-4852-99c5-241a5edadcae"
+        },
+        {
+          "taskId": "4d98868a-0a40-436e-a026-93e1795a8d3c"
+        },
+        {
+          "taskId": "d76ef09f-18a8-4ede-b71e-5d28dadf4e70"
+        }
+      ],
+      "createdAt": "2025-12-12T16:45:53.202Z",
+      "updatedAt": "2025-12-12T16:45:53.202Z",
+      "relatedFiles": [
+        {
+          "path": "tests/test_mqtt.py",
+          "type": "TO_MODIFY",
+          "description": "MQTT client comprehensive test suite"
+        },
+        {
+          "path": "tests/test_firebase.py",
+          "type": "TO_MODIFY",
+          "description": "Firebase client comprehensive test suite"
+        },
+        {
+          "path": "backend/mqtt_client.py",
+          "type": "REFERENCE",
+          "description": "MQTT client implementation"
+        },
+        {
+          "path": "backend/firebase_client.py",
+          "type": "REFERENCE",
+          "description": "Firebase client implementation"
+        }
+      ],
+      "implementationGuide": "Develop test_mqtt.py with mock MQTT broker testing connection establishment, message publishing, payload format validation, connection retry logic, and network failure simulation. Create test_firebase.py with mock Firebase testing authentication, read/write operations, database structure validation, error handling, and offline scenarios. Include integration tests simulating real network conditions, latency, and intermittent connectivity. Use pytest-asyncio for testing asynchronous operations.",
+      "verificationCriteria": "MQTT connection and publishing tested with mock broker. Message payload validation ensures schema compliance. Connection retry logic verified under failure conditions. Firebase authentication and database operations tested. Error handling covers all network failure scenarios. Mock services accurately simulate real service behavior. Asynchronous operations properly tested.",
+      "analysisResult": "Smart Green IoT Farm Simulation - Complete implementation of educational IoT system demonstrating accelerated time simulation, real-time MQTT telemetry, Firebase persistence, and predictive ML analytics through three parallel development tracks."
+    },
+    {
+      "id": "35bd1f97-eb06-42bd-b1a5-634b5b1b52da",
+      "name": "Develop Integration Test Suite",
+      "description": "Create end-to-end integration tests validating complete system workflow from backend simulation through MQTT/Firebase to frontend visualization with performance verification.",
+      "notes": "Critical system-wide validation ensuring all components work together correctly. Must test complete user scenarios and system reliability.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "520262e8-c203-4432-84ad-66f24b6e99bd"
+        },
+        {
+          "taskId": "17e3965c-63e6-4b2d-b7fb-654c13565ffb"
+        },
+        {
+          "taskId": "638e0b57-8a98-4feb-a9d8-b57dbb5950be"
+        }
+      ],
+      "createdAt": "2025-12-12T16:45:53.202Z",
+      "updatedAt": "2025-12-12T16:45:53.202Z",
+      "relatedFiles": [
+        {
+          "path": "tests/test_integration.py",
+          "type": "TO_MODIFY",
+          "description": "End-to-end integration test suite"
+        },
+        {
+          "path": "backend/main.py",
+          "type": "REFERENCE",
+          "description": "Backend main application"
+        },
+        {
+          "path": "frontend/js/main.js",
+          "type": "REFERENCE",
+          "description": "Frontend main application"
+        },
+        {
+          "path": "tests/conftest.py",
+          "type": "TO_MODIFY",
+          "description": "Integration testing fixtures and environment setup"
+        }
+      ],
+      "implementationGuide": "Implement comprehensive integration tests in test_integration.py covering complete data flow: Backend physics → MQTT telemetry → Frontend visualization, User control → Firebase → Backend actuator response, Historical logging → Firebase → Frontend charts, ML prediction pipeline validation, and system performance under continuous operation. Include startup/shutdown procedures, error recovery scenarios, and load testing. Use Docker containers or mock services to simulate complete environment.",
+      "verificationCriteria": "Complete data flow tested from backend to frontend. User interaction scenarios validated end-to-end. Performance requirements verified (<2s latency, 1Hz updates). Error recovery tested under various failure conditions. System startup and shutdown procedures validated. Load testing confirms system stability over extended operation. All integration points function correctly.",
+      "analysisResult": "Smart Green IoT Farm Simulation - Complete implementation of educational IoT system demonstrating accelerated time simulation, real-time MQTT telemetry, Firebase persistence, and predictive ML analytics through three parallel development tracks."
+    },
+    {
+      "id": "37bc56d5-00d6-4df8-b3ec-935a0977abdd",
+      "name": "Complete Documentation & Project Setup",
+      "description": "Finalize comprehensive project documentation, setup instructions, development environment configuration, and deployment guides ensuring project accessibility and maintainability.",
+      "notes": "Essential documentation enabling project adoption and maintenance. Must be clear, complete, and accessible to developers and users.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "35bd1f97-eb06-42bd-b1a5-634b5b1b52da"
+        }
+      ],
+      "createdAt": "2025-12-12T16:45:53.202Z",
+      "updatedAt": "2025-12-12T16:45:53.202Z",
+      "relatedFiles": [
+        {
+          "path": "README.md",
+          "type": "TO_MODIFY",
+          "description": "Complete project documentation and setup guide"
+        },
+        {
+          "path": "docs/setup-guide.md",
+          "type": "CREATE",
+          "description": "Detailed setup and configuration instructions"
+        },
+        {
+          "path": "docs/troubleshooting.md",
+          "type": "CREATE",
+          "description": "Common issues and solutions guide"
+        },
+        {
+          "path": ".vscode/settings.json",
+          "type": "CREATE",
+          "description": "VS Code workspace configuration"
+        },
+        {
+          "path": ".vscode/extensions.json",
+          "type": "CREATE",
+          "description": "Recommended VS Code extensions"
+        }
+      ],
+      "implementationGuide": "Update README.md with complete project description, setup instructions, architecture overview, and usage examples. Create comprehensive setup guide including Python environment, Firebase configuration, MQTT broker setup, and frontend hosting. Document all configuration options and customization possibilities. Create development environment setup with VS Code configuration, recommended extensions, and debugging setup. Include troubleshooting guide for common issues and deployment checklist.",
+      "verificationCriteria": "README.md provides complete project overview and setup instructions. All documentation is accurate and up-to-date. Setup guide enables successful project installation and configuration. Development environment properly configured with tooling. Troubleshooting guide addresses common issues. Project structure and documentation facilitate easy maintenance and contribution.",
+      "analysisResult": "Smart Green IoT Farm Simulation - Complete implementation of educational IoT system demonstrating accelerated time simulation, real-time MQTT telemetry, Firebase persistence, and predictive ML analytics through three parallel development tracks."
+    }
+  ]
+}
