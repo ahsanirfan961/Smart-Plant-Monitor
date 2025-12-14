@@ -1,0 +1,113 @@
+services:
+  # MQTT Broker
+  mosquitto:
+    image: eclipse-mosquitto:2.0
+    container_name: smart-plant-mqtt
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./mqtt-broker/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+      - mosquitto_data:/mosquitto/data
+      - mosquitto_logs:/mosquitto/log
+    networks:
+      - smart-plant-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mosquitto_sub", "-h", "localhost", "-t", "$$SYS/#", "-C", "1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Sensor Data Service
+  sensor-service:
+    build:
+      context: ./services/sensor-data-service
+      dockerfile: Dockerfile
+    container_name: smart-plant-sensors
+    depends_on:
+      - mosquitto
+    environment:
+      MQTT_BROKER: mosquitto
+      MQTT_PORT: 1883
+      LOG_LEVEL: INFO
+    networks:
+      - smart-plant-network
+    restart: unless-stopped
+
+  # Actuator Control Service
+  actuator-service:
+    build:
+      context: ./services/actuator-control
+      dockerfile: Dockerfile
+    container_name: smart-plant-actuators
+    depends_on:
+      - mosquitto
+    environment:
+      MQTT_BROKER: mosquitto
+      MQTT_PORT: 1883
+      AUTO_CONTROL: "true"
+      LOG_LEVEL: INFO
+    networks:
+      - smart-plant-network
+    restart: unless-stopped
+
+  # Firebase Service
+  firebase-service:
+    build:
+      context: ./services/firebase-service
+      dockerfile: Dockerfile
+    container_name: smart-plant-firebase
+    depends_on:
+      - mosquitto
+    environment:
+      MQTT_BROKER: mosquitto
+      MQTT_PORT: 1883
+      LOG_LEVEL: INFO
+    networks:
+      - smart-plant-network
+    restart: unless-stopped
+
+  # Data Analytics Service
+  analytics-service:
+    build:
+      context: ./services/data-analytics
+      dockerfile: Dockerfile
+    container_name: smart-plant-analytics
+    depends_on:
+      - mosquitto
+    environment:
+      MQTT_BROKER: mosquitto
+      MQTT_PORT: 1883
+      LOG_LEVEL: INFO
+    networks:
+      - smart-plant-network
+    restart: unless-stopped
+
+  # Web Dashboard API
+  dashboard-api:
+    build:
+      context: ./dashboard
+      dockerfile: backend-api/Dockerfile
+    container_name: smart-plant-dashboard
+    depends_on:
+      - mosquitto
+    ports:
+      - "3000:3000"
+    environment:
+      MQTT_BROKER: mqtt://mosquitto:1883
+      PORT: 3000
+      NODE_ENV: production
+    networks:
+      - smart-plant-network
+    restart: unless-stopped
+
+networks:
+  smart-plant-network:
+    driver: bridge
+
+volumes:
+  mosquitto_data:
+    driver: local
+  mosquitto_logs:
+    driver: local

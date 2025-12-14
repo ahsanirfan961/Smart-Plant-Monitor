@@ -1,0 +1,99 @@
+{
+  "version": 1,
+  "author": "Ibrahim Qaiser",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "board-esp32-devkit-c-v4",
+      "id": "esp",
+      "top": 0,
+      "left": 0,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-dht22",
+      "id": "dht22",
+      "top": 50,
+      "left": 300,
+      "attrs": {
+        "temperature": "24",
+        "humidity": "50"
+      }
+    },
+    {
+      "type": "wokwi-slide-potentiometer",
+      "id": "moisture",
+      "top": 150,
+      "left": 300,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-photoresistor-sensor",
+      "id": "ldr",
+      "top": 250,
+      "left": 300,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-relay-module",
+      "id": "pump-relay",
+      "top": 50,
+      "left": 600,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-relay-module",
+      "id": "fan-relay",
+      "top": 150,
+      "left": 600,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-led",
+      "id": "grow-light",
+      "top": 250,
+      "left": 600,
+      "attrs": {
+        "color": "red"
+      }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r1",
+      "top": 260,
+      "left": 550,
+      "attrs": {
+        "value": "220"
+      }
+    }
+  ],
+  "connections": [
+    ["esp:TX", "$serialMonitor:RX", "", []],
+    ["esp:RX", "$serialMonitor:TX", "", []],
+    
+    ["esp:GND.1", "dht22:GND", "black", ["v0"]],
+    ["esp:3V3", "dht22:VCC", "red", ["v0"]],
+    ["esp:4", "dht22:SDA", "yellow", ["h0"]],
+    
+    ["esp:GND.2", "moisture:GND", "black", ["v0"]],
+    ["esp:3V3", "moisture:VCC", "red", ["v0"]],
+    ["esp:34", "moisture:SIG", "orange", ["h0"]],
+    
+    ["esp:GND.3", "ldr:GND", "black", ["v0"]],
+    ["esp:3V3", "ldr:VCC", "red", ["v0"]],
+    ["esp:35", "ldr:AO", "orange", ["h0"]],
+    
+    ["esp:5", "pump-relay:IN", "green", ["h0"]],
+    ["esp:GND.4", "pump-relay:GND", "black", ["h0"]],
+    ["esp:VIN", "pump-relay:VCC", "red", ["h0"]],
+    
+    ["esp:18", "fan-relay:IN", "green", ["h0"]],
+    ["esp:GND.5", "fan-relay:GND", "black", ["h0"]],
+    ["esp:VIN", "fan-relay:VCC", "red", ["h0"]],
+    
+    ["esp:19", "r1:1", "green", ["h0"]],
+    ["r1:2", "grow-light:A", "green", ["h0"]],
+    ["esp:GND.6", "grow-light:C", "black", ["h0"]]
+  ],
+  "dependencies": {}
+}

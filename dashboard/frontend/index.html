@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Plant IoT Dashboard</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.min.js"></script>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1>🌱 Smart Plant IoT Dashboard</h1>
+                <div class="connection-status">
+                    <span class="status-indicator" id="connectionStatus"></span>
+                    <span id="connectionText">Connecting...</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Sensor Readings Section -->
+            <section class="section sensors">
+                <h2>📊 Sensor Readings</h2>
+                <div class="gauges-grid">
+                    <div class="gauge-card">
+                        <h3>Temperature</h3>
+                        <div class="gauge">
+                            <canvas id="tempGauge"></canvas>
+                        </div>
+                        <div class="value" id="tempValue">-- °C</div>
+                        <div class="unit">°Celsius</div>
+                    </div>
+
+                    <div class="gauge-card">
+                        <h3>Humidity</h3>
+                        <div class="gauge">
+                            <canvas id="humidityGauge"></canvas>
+                        </div>
+                        <div class="value" id="humidityValue">-- %</div>
+                        <div class="unit">Relative Humidity</div>
+                    </div>
+
+                    <div class="gauge-card">
+                        <h3>Soil Moisture</h3>
+                        <div class="gauge">
+                            <canvas id="moistureGauge"></canvas>
+                        </div>
+                        <div class="value" id="moistureValue">-- %</div>
+                        <div class="unit">Soil Moisture</div>
+                    </div>
+
+                    <div class="gauge-card">
+                        <h3>Light Intensity</h3>
+                        <div class="gauge">
+                            <canvas id="lightGauge"></canvas>
+                        </div>
+                        <div class="value" id="lightValue">-- %</div>
+                        <div class="unit">Light Intensity</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Actuator Status Section -->
+            <section class="section actuators">
+                <h2>🔧 Actuator Status & Control</h2>
+                <div class="actuators-grid">
+                    <div class="actuator-card">
+                        <h3>💧 Water Pump</h3>
+                        <div class="status" id="pumpStatus">OFF</div>
+                        <div class="controls">
+                            <button class="btn-on" onclick="controlActuator('pump', 'ON')">Turn ON</button>
+                            <button class="btn-off" onclick="controlActuator('pump', 'OFF')">Turn OFF</button>
+                        </div>
+                    </div>
+
+                    <div class="actuator-card">
+                        <h3>🌀 Cooling Fan</h3>
+                        <div class="status" id="fanStatus">OFF</div>
+                        <div class="controls">
+                            <button class="btn-on" onclick="controlActuator('fan', 'ON')">Turn ON</button>
+                            <button class="btn-off" onclick="controlActuator('fan', 'OFF')">Turn OFF</button>
+                        </div>
+                    </div>
+
+                    <div class="actuator-card">
+                        <h3>💡 Grow Light</h3>
+                        <div class="status" id="lightStatus">OFF</div>
+                        <div class="controls">
+                            <button class="btn-on" onclick="controlActuator('grow-light', 'ON')">Turn ON</button>
+                            <button class="btn-off" onclick="controlActuator('grow-light', 'OFF')">Turn OFF</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Predictions & Health Section -->
+            <section class="section predictions">
+                <h2>🔮 Predictions & Health</h2>
+                <div class="predictions-grid">
+                    <div class="prediction-card">
+                        <h3>Soil Dryness Forecast</h3>
+                        <div class="prediction-value" id="drynessETA">-- hours</div>
+                        <div class="prediction-label">Time to Critical Moisture</div>
+                        <div class="recommendation" id="drynessRec">--</div>
+                        <div class="confidence">Confidence: <span id="drynessConf">--%</span></div>
+                    </div>
+
+                    <div class="prediction-card">
+                        <h3>Plant Health Score</h3>
+                        <div class="health-score">
+                            <div class="score-circle" id="healthScore">--</div>
+                            <div class="score-label">/100</div>
+                        </div>
+                        <div class="health-class" id="healthClass">--</div>
+                    </div>
+                </div>
+
+                <div class="recommendations">
+                    <h4>📝 Recommendations</h4>
+                    <ul id="recommendationsList">
+                        <li>Loading recommendations...</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Alerts Section -->
+            <section class="section alerts">
+                <h2>⚠️ Alerts & Events</h2>
+                <div class="alerts-container" id="alertsContainer">
+                    <div class="alert-item alert-info">
+                        <span>System initialized. Waiting for data...</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Charts Section -->
+            <section class="section charts">
+                <h2>📈 24-Hour Trends</h2>
+                <div class="charts-grid">
+                    <div class="chart-container">
+                        <h3>Temperature Trend</h3>
+                        <canvas id="tempChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Humidity Trend</h3>
+                        <canvas id="humidityChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Soil Moisture Trend</h3>
+                        <canvas id="moistureChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Light Intensity Trend</h3>
+                        <canvas id="lightChart"></canvas>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Smart Plant IoT System | Last Update: <span id="lastUpdate">--:--:--</span></p>
+        </footer>
+    </div>
+
+    <script src="/js/dashboard.js"></script>
+</body>
+</html>
