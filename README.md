@@ -12,6 +12,12 @@ A fully simulated IoT ecosystem for autonomous plant environment management usin
 
 ---
 
+## 📁 Project Demo
+
+https://github.com/user-attachments/assets/25208b58-f2b4-4f86-906d-461fb4fb5f47
+
+```
+
 ## 📁 Project Structure
 
 ```
