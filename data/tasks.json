@@ -1,0 +1,1162 @@
+{
+  "tasks": [
+    {
+      "id": "61c2b071-ee06-4bd9-9340-6e7f1715ba58",
+      "name": "Setup Backend Project Structure & Configuration",
+      "description": "Create the foundational Python backend structure with proper configuration management, logging setup, and dependency management. Establish the core project architecture following documented standards.",
+      "notes": "Foundation task for both backend tracks - must be completed before any other backend tasks. Establishes coding standards and architectural patterns.",
+      "status": "pending",
+      "dependencies": [],
+      "createdAt": "2025-12-12T17:01:26.702Z",
+      "updatedAt": "2025-12-12T17:01:26.702Z",
+      "relatedFiles": [
+        {
+          "path": "backend/main.py",
+          "type": "CREATE",
+          "description": "Application entry point with proper logging and configuration loading"
+        },
+        {
+          "path": "backend/config.py",
+          "type": "CREATE",
+          "description": "Centralized configuration constants for time scaling, physics, and thresholds"
+        },
+        {
+          "path": "backend/utils.py",
+          "type": "CREATE",
+          "description": "Shared utility functions and helper methods"
+        },
+        {
+          "path": "backend/requirements.txt",
+          "type": "CREATE",
+          "description": "Python dependencies specification"
+        },
+        {
+          "path": "tests/conftest.py",
+          "type": "CREATE",
+          "description": "Pytest fixtures and testing utilities"
+        },
+        {
+          "path": "tests/pytest.ini",
+          "type": "CREATE",
+          "description": "Pytest configuration with coverage settings"
+        }
+      ],
+      "implementationGuide": "Create backend/ directory with main.py entry point, config.py for all constants (time scaling, physics parameters, thresholds), utils.py for shared utilities, and requirements.txt with dependencies: paho-mqtt, firebase-admin, scikit-learn, pandas, numpy. Setup Python logging configuration with appropriate log levels. Implement basic project structure validation and configuration loading mechanisms.",
+      "verificationCriteria": "Backend directory structure created with all required files. Configuration constants properly defined matching documentation values. Requirements.txt includes all specified dependencies. Logging configured properly without print statements. Testing infrastructure established with pytest configuration. Code follows type annotation standards.",
+      "analysisResult": "Smart Green IoT Farm Simulation - Reorganized into balanced TDD approach with two backend developers (Physics/ML + Communication/Integration) and one frontend developer, following test-driven development methodology for improved code quality and balanced workload distribution."
+    },
+    {
+      "id": "036f51fa-d8f1-4a06-9b3b-64975c709bce",
+      "name": "Implement Physics Engine with TDD",
+      "description": "Develop the core physics simulation engine using test-driven development - write tests first, then implement physics components including time scaling, temperature modeling, moisture dynamics, and day/night cycles.",
+      "notes": "TDD approach ensures physics accuracy from the start. Tests serve as specification and validation. Critical mathematical components require high precision.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "61c2b071-ee06-4bd9-9340-6e7f1715ba58"
+        }
+      ],
+      "createdAt": "2025-12-12T17:01:26.702Z",
+      "updatedAt": "2025-12-12T17:01:26.702Z",
+      "relatedFiles": [
+        {
+          "path": "tests/test_physics.py",
+          "type": "CREATE",
+          "description": "Comprehensive physics engine test suite (write first)"
+        },
+        {
+          "path": "backend/physics_engine.py",
+          "type": "CREATE",
+          "description": "Physics simulation implementation (implement to pass tests)"
+        },
+        {
+          "path": "backend/config.py",
+          "type": "TO_MODIFY",
+          "description": "Physics constants and parameters"
+        }
+      ],
+      "implementationGuide": "Start by writing comprehensive test cases in test_physics.py for TimeManager (1:6 scaling), TemperatureModel (sinusoidal curve), MoistureSystem (evaporation, heat stress, sprinkler), and DayNightCycle. Then implement physics_engine.py to pass all tests. Include edge cases, boundary conditions, and mathematical precision validation. Use parametrized tests for multiple data points.",
+      "verificationCriteria": "All physics tests pass with mathematical precision. Time scaling implements exact 1:6 ratio. Temperature follows sinusoidal curve with peak at 14:00. Moisture dynamics correctly implement evaporation, heat stress (2x >35°C), and sprinkler effects. Day/night transitions occur at specified times. Test coverage >90% for physics module. All edge cases handled appropriately.",
+      "analysisResult": "Smart Green IoT Farm Simulation - Reorganized into balanced TDD approach with two backend developers (Physics/ML + Communication/Integration) and one frontend developer, following test-driven development methodology for improved code quality and balanced workload distribution."
+    },
+    {
+      "id": "fe5c5e6c-5390-4d7e-8a07-9936e628ed32",
+      "name": "Develop ML Prediction System with TDD",
+      "description": "Create the machine learning predictor using test-driven development - write test cases first with synthetic data, then implement Linear Regression system for moisture prediction with rolling buffer management.",
+      "notes": "TDD ensures reliable ML predictions across various scenarios. Synthetic test data provides known outcomes for validation. Buffer management critical for memory efficiency.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "61c2b071-ee06-4bd9-9340-6e7f1715ba58"
+        }
+      ],
+      "createdAt": "2025-12-12T17:01:26.702Z",
+      "updatedAt": "2025-12-12T17:01:26.702Z",
+      "relatedFiles": [
+        {
+          "path": "tests/test_ml.py",
+          "type": "CREATE",
+          "description": "ML predictor test suite with synthetic data (write first)"
+        },
+        {
+          "path": "backend/ml_predictor.py",
+          "type": "CREATE",
+          "description": "Linear regression predictor implementation (implement to pass tests)"
+        },
+        {
+          "path": "backend/config.py",
+          "type": "TO_MODIFY",
+          "description": "ML configuration parameters and thresholds"
+        }
+      ],
+      "implementationGuide": "Start by writing test_ml.py with synthetic datasets of known moisture decline patterns, edge cases (insufficient data, flat curves), buffer management tests (rolling window, day resets), and prediction accuracy validation. Then implement ml_predictor.py with MLPredictor class using scikit-learn to pass all tests. Include performance and memory tests.",
+      "verificationCriteria": "All ML tests pass including synthetic data validation. Linear regression model trains successfully and makes accurate predictions. Rolling buffer management works correctly with day boundary resets. Prediction output formats properly as 'Xh Ym' strings. Edge cases (insufficient data, anomalies) handled gracefully. Performance tests confirm acceptable training times and memory usage.",
+      "analysisResult": "Smart Green IoT Farm Simulation - Reorganized into balanced TDD approach with two backend developers (Physics/ML + Communication/Integration) and one frontend developer, following test-driven development methodology for improved code quality and balanced workload distribution."
+    },
+    {
+      "id": "e8b2803d-3290-44a6-b85f-76839d94441d",
+      "name": "Build MQTT Communication with TDD",
+      "description": "Implement MQTT publisher client using test-driven development - create mock broker tests first, then develop robust MQTT client with 1Hz telemetry broadcasting, connection management, and error handling.",
+      "notes": "TDD ensures robust network communication. Mock services enable testing without external dependencies. Connection reliability critical for real-time telemetry.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "61c2b071-ee06-4bd9-9340-6e7f1715ba58"
+        }
+      ],
+      "createdAt": "2025-12-12T17:01:26.702Z",
+      "updatedAt": "2025-12-12T17:01:26.702Z",
+      "relatedFiles": [
+        {
+          "path": "tests/test_mqtt.py",
+          "type": "CREATE",
+          "description": "MQTT client test suite with mock broker (write first)"
+        },
+        {
+          "path": "backend/mqtt_client.py",
+          "type": "CREATE",
+          "description": "MQTT publisher implementation (implement to pass tests)"
+        },
+        {
+          "path": "backend/config.py",
+          "type": "TO_MODIFY",
+          "description": "MQTT broker configuration and topic settings"
+        }
+      ],
+      "implementationGuide": "Start by writing test_mqtt.py with mock MQTT broker tests covering connection establishment, message publishing, payload validation, connection retry logic, and network failure simulation. Then implement mqtt_client.py with MQTTPublisher class to pass all tests. Use pytest-asyncio for asynchronous testing.",
+      "verificationCriteria": "All MQTT tests pass including mock broker scenarios. Client successfully connects to public broker and publishes at 1Hz. JSON payload matches documented schema exactly. Connection retry logic handles network failures gracefully. All network events properly logged. Asynchronous operations tested correctly.",
+      "analysisResult": "Smart Green IoT Farm Simulation - Reorganized into balanced TDD approach with two backend developers (Physics/ML + Communication/Integration) and one frontend developer, following test-driven development methodology for improved code quality and balanced workload distribution."
+    },
+    {
+      "id": "51f47c9b-97c4-4a9c-99e3-5fa64fa0b235",
+      "name": "Create Firebase Integration with TDD",
+      "description": "Develop Firebase Realtime Database client using test-driven development - write mock Firebase tests first, then implement client for actuator state reading and historical logging with authentication and error handling.",
+      "notes": "TDD ensures reliable database operations. Mock Firebase enables testing without cloud dependency. Proper error handling critical for production reliability.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "61c2b071-ee06-4bd9-9340-6e7f1715ba58"
+        }
+      ],
+      "createdAt": "2025-12-12T17:01:26.702Z",
+      "updatedAt": "2025-12-12T17:01:26.702Z",
+      "relatedFiles": [
+        {
+          "path": "tests/test_firebase.py",
+          "type": "CREATE",
+          "description": "Firebase client test suite with mock database (write first)"
+        },
+        {
+          "path": "backend/firebase_client.py",
+          "type": "CREATE",
+          "description": "Firebase integration implementation (implement to pass tests)"
+        },
+        {
+          "path": "backend/config.py",
+          "type": "TO_MODIFY",
+          "description": "Firebase project configuration and database paths"
+        }
+      ],
+      "implementationGuide": "Start by writing test_firebase.py with mock Firebase tests covering authentication, read/write operations, database structure validation, error handling, and offline scenarios. Then implement firebase_client.py with FirebaseClient class using firebase-admin SDK to pass all tests. Include retry logic and proper error handling.",
+      "verificationCriteria": "All Firebase tests pass including mock database scenarios. Client authenticates successfully and performs read/write operations correctly. Database structure matches specifications. Network error handling and retry logic work properly. All database operations logged appropriately. Offline scenarios handled gracefully.",
+      "analysisResult": "Smart Green IoT Farm Simulation - Reorganized into balanced TDD approach with two backend developers (Physics/ML + Communication/Integration) and one frontend developer, following test-driven development methodology for improved code quality and balanced workload distribution."
+    },
+    {
+      "id": "f59228a0-28d2-46fd-93fd-20bc582ac639",
+      "name": "Integrate Backend Main Loop with Integration Tests",
+      "description": "Develop the main application orchestration loop using test-driven development - create integration tests first, then implement the main coordinator that manages physics, ML, MQTT, and Firebase with proper timing and error isolation.",
+      "notes": "Integration tests ensure complete system reliability. Main loop must coordinate all components while maintaining timing accuracy and error isolation. Critical for system stability.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "036f51fa-d8f1-4a06-9b3b-64975c709bce"
+        },
+        {
+          "taskId": "fe5c5e6c-5390-4d7e-8a07-9936e628ed32"
+        },
+        {
+          "taskId": "e8b2803d-3290-44a6-b85f-76839d94441d"
+        },
+        {
+          "taskId": "51f47c9b-97c4-4a9c-99e3-5fa64fa0b235"
+        }
+      ],
+      "createdAt": "2025-12-12T17:01:26.702Z",
+      "updatedAt": "2025-12-12T17:01:26.702Z",
+      "relatedFiles": [
+        {
+          "path": "tests/test_integration.py",
+          "type": "CREATE",
+          "description": "End-to-end integration test suite (write first)"
+        },
+        {
+          "path": "backend/main.py",
+          "type": "TO_MODIFY",
+          "description": "Main simulation orchestrator (implement to pass tests)"
+        },
+        {
+          "path": "backend/physics_engine.py",
+          "type": "DEPENDENCY",
+          "description": "Physics simulation components"
+        },
+        {
+          "path": "backend/ml_predictor.py",
+          "type": "DEPENDENCY",
+          "description": "ML prediction system"
+        },
+        {
+          "path": "backend/mqtt_client.py",
+          "type": "DEPENDENCY",
+          "description": "MQTT communication"
+        },
+        {
+          "path": "backend/firebase_client.py",
+          "type": "DEPENDENCY",
+          "description": "Firebase integration"
+        }
+      ],
+      "implementationGuide": "Start by writing test_integration.py covering complete data flow scenarios, timing validation, component coordination, error isolation, and system lifecycle. Then enhance main.py with MainSimulation class to pass all integration tests. Include comprehensive end-to-end scenarios and performance validation.",
+      "verificationCriteria": "All integration tests pass including end-to-end scenarios. Main loop successfully orchestrates all components with 1-second timing accuracy. Error isolation prevents component failures from system crash. Performance tests validate <2s latency and continuous operation. Graceful shutdown and startup work correctly. System maintains stability over multiple virtual day cycles.",
+      "analysisResult": "Smart Green IoT Farm Simulation - Reorganized into balanced TDD approach with two backend developers (Physics/ML + Communication/Integration) and one frontend developer, following test-driven development methodology for improved code quality and balanced workload distribution."
+    },
+    {
+      "id": "c914e2f3-a84f-4942-930a-224f16a65de7",
+      "name": "Setup Frontend Project Structure",
+      "description": "Create the foundational frontend structure with HTML5 dashboard, modular CSS architecture, and JavaScript module organization following documented standards.",
+      "notes": "Foundation task for frontend development - establishes architecture and file organization. Must be completed before other frontend tasks.",
+      "status": "pending",
+      "dependencies": [],
+      "createdAt": "2025-12-12T17:01:26.702Z",
+      "updatedAt": "2025-12-12T17:01:26.702Z",
+      "relatedFiles": [
+        {
+          "path": "frontend/index.html",
+          "type": "CREATE",
+          "description": "Main dashboard HTML with semantic structure"
+        },
+        {
+          "path": "frontend/css/styles.css",
+          "type": "CREATE",
+          "description": "Primary stylesheet with responsive design"
+        },
+        {
+          "path": "frontend/css/animations.css",
+          "type": "CREATE",
+          "description": "Sky gradient and sun movement animations"
+        },
+        {
+          "path": "frontend/css/components.css",
+          "type": "CREATE",
+          "description": "UI component styles and layouts"
+        },
+        {
+          "path": "frontend/js/main.js",
+          "type": "CREATE",
+          "description": "Application initialization and module coordination"
+        },
+        {
+          "path": "frontend/assets/",
+          "type": "CREATE",
+          "description": "Directory for plant health images and other assets"
+        }
+      ],
+      "implementationGuide": "Create frontend/ directory with index.html as main dashboard, css/ subdirectory containing styles.css (main styles), animations.css (sky/sun animations), components.css (UI components). Create js/ subdirectory with main.js (app initialization), mqtt_handler.js, firebase_handler.js, ui_controller.js, animations.js. Create assets/ directory for plant images. Setup proper HTML5 structure with semantic markup and responsive viewport configuration.",
+      "verificationCriteria": "Frontend directory structure created with all required files and subdirectories. HTML5 semantic markup implemented with proper viewport configuration. CSS modular architecture established. JavaScript module structure created with clear separation of concerns. Assets directory prepared for image resources.",
+      "analysisResult": "Smart Green IoT Farm Simulation - Reorganized into balanced TDD approach with two backend developers (Physics/ML + Communication/Integration) and one frontend developer, following test-driven development methodology for improved code quality and balanced workload distribution."
+    },
+    {
+      "id": "e90e8c97-b764-4dbe-922f-975428f504b1",
+      "name": "Develop MQTT WebSocket Handler",
+      "description": "Create JavaScript MQTT client using WebSocket connection to subscribe to telemetry data from backend with real-time data processing and error handling.",
+      "notes": "Critical real-time data component enabling frontend visualization. Must maintain reliable connection and handle network interruptions gracefully.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "c914e2f3-a84f-4942-930a-224f16a65de7"
+        }
+      ],
+      "createdAt": "2025-12-12T17:01:26.702Z",
+      "updatedAt": "2025-12-12T17:01:26.702Z",
+      "relatedFiles": [
+        {
+          "path": "frontend/js/mqtt_handler.js",
+          "type": "CREATE",
+          "description": "MQTT WebSocket client for real-time telemetry subscription"
+        },
+        {
+          "path": "frontend/index.html",
+          "type": "TO_MODIFY",
+          "description": "Include MQTT library CDN and connection status indicators"
+        }
+      ],
+      "implementationGuide": "Implement mqtt_handler.js using Paho MQTT JavaScript library over WebSockets. Connect to same broker as backend but using WebSocket port (typically 8000). Subscribe to cs335/bese13ab/sensor_data topic. Parse incoming JSON telemetry and trigger UI updates. Implement connection retry logic, connection status indicators, and proper error handling for network issues. Include message validation to ensure data integrity.",
+      "verificationCriteria": "MQTT WebSocket client successfully connects to broker. Subscribes to correct telemetry topic. Parses JSON messages and validates data structure. Connection retry logic handles network failures. Connection status visible to users. Message processing triggers appropriate UI updates.",
+      "analysisResult": "Smart Green IoT Farm Simulation - Reorganized into balanced TDD approach with two backend developers (Physics/ML + Communication/Integration) and one frontend developer, following test-driven development methodology for improved code quality and balanced workload distribution."
+    },
+    {
+      "id": "23c32cc4-e51b-4ee8-be00-13cf6e1e513d",
+      "name": "Implement Firebase Web Integration",
+      "description": "Develop JavaScript Firebase client for writing actuator commands and reading historical data using Firebase Web SDK with proper authentication and error handling.",
+      "notes": "Bidirectional data component enabling user control and historical data visualization. Requires Firebase web app configuration.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "c914e2f3-a84f-4942-930a-224f16a65de7"
+        }
+      ],
+      "createdAt": "2025-12-12T17:01:26.702Z",
+      "updatedAt": "2025-12-12T17:01:26.702Z",
+      "relatedFiles": [
+        {
+          "path": "frontend/js/firebase_handler.js",
+          "type": "CREATE",
+          "description": "Firebase Web SDK integration for actuator control and data retrieval"
+        },
+        {
+          "path": "frontend/index.html",
+          "type": "TO_MODIFY",
+          "description": "Include Firebase SDK CDN links"
+        }
+      ],
+      "implementationGuide": "Create firebase_handler.js using Firebase Web SDK. Configure Firebase project connection with web app credentials. Implement writeActuatorState() function to update plant_monitor/actuators/ branch when users interact with controls. Implement readHistoricalData() for displaying environmental trends. Include proper error handling, connection status monitoring, and retry logic for Firebase operations. Add real-time listeners for actuator state changes.",
+      "verificationCriteria": "Firebase Web SDK successfully connects to project. Actuator state updates write correctly to database. Historical data retrieval functions properly. Real-time listeners respond to database changes. Error handling manages network and authentication issues. Connection status monitoring implemented.",
+      "analysisResult": "Smart Green IoT Farm Simulation - Reorganized into balanced TDD approach with two backend developers (Physics/ML + Communication/Integration) and one frontend developer, following test-driven development methodology for improved code quality and balanced workload distribution."
+    },
+    {
+      "id": "bfe26de5-ebff-4a95-952c-9f746f603532",
+      "name": "Create Digital Twin Visualization Engine",
+      "description": "Develop the core visual components including sky gradient animations, sun/moon movement, and plant health state visualization synchronized with telemetry data.",
+      "notes": "Core visual component creating the 'Digital Twin' experience. Animations must be smooth and synchronized with real-time data updates.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "c914e2f3-a84f-4942-930a-224f16a65de7"
+        },
+        {
+          "taskId": "e90e8c97-b764-4dbe-922f-975428f504b1"
+        }
+      ],
+      "createdAt": "2025-12-12T17:01:26.702Z",
+      "updatedAt": "2025-12-12T17:01:26.702Z",
+      "relatedFiles": [
+        {
+          "path": "frontend/js/animations.js",
+          "type": "CREATE",
+          "description": "Sky, celestial body, and plant health visualization engine"
+        },
+        {
+          "path": "frontend/css/animations.css",
+          "type": "TO_MODIFY",
+          "description": "Animation keyframes and transition styles"
+        },
+        {
+          "path": "frontend/assets/plant_healthy.png",
+          "type": "CREATE",
+          "description": "Healthy plant image asset"
+        },
+        {
+          "path": "frontend/assets/plant_sagging.png",
+          "type": "CREATE",
+          "description": "Sagging plant image asset"
+        },
+        {
+          "path": "frontend/assets/plant_dead.png",
+          "type": "CREATE",
+          "description": "Dead/wilted plant image asset"
+        }
+      ],
+      "implementationGuide": "Implement animations.js with SkyController class for CSS gradient transitions (blue day → black night based on day_progress), CelestialBody class for sun/moon arc movement across screen, and PlantHealthVisualizer for dynamic image switching (healthy/sagging/dead based on moisture thresholds). Use CSS custom properties for smooth transitions. Implement requestAnimationFrame for smooth animations and proper performance. Include fallback mechanisms for older browsers.",
+      "verificationCriteria": "Sky gradient smoothly transitions based on day_progress values. Sun/moon movement follows realistic arc trajectory. Plant images change appropriately at moisture thresholds (50%, 30%). Animations perform smoothly without performance issues. CSS transitions provide smooth visual feedback. Browser compatibility maintained.",
+      "analysisResult": "Smart Green IoT Farm Simulation - Reorganized into balanced TDD approach with two backend developers (Physics/ML + Communication/Integration) and one frontend developer, following test-driven development methodology for improved code quality and balanced workload distribution."
+    },
+    {
+      "id": "d5d95644-8d8a-4f4e-a60f-362379f111ea",
+      "name": "Build Interactive Dashboard Controls",
+      "description": "Create user interface controls for actuator management (sprinkler, lights, fan) with visual feedback, data displays, and alert systems for critical conditions.",
+      "notes": "Primary user interaction component enabling control of the simulation. Must provide clear feedback and intuitive operation.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "c914e2f3-a84f-4942-930a-224f16a65de7"
+        },
+        {
+          "taskId": "23c32cc4-e51b-4ee8-be00-13cf6e1e513d"
+        },
+        {
+          "taskId": "e90e8c97-b764-4dbe-922f-975428f504b1"
+        }
+      ],
+      "createdAt": "2025-12-12T17:01:26.702Z",
+      "updatedAt": "2025-12-12T17:01:26.702Z",
+      "relatedFiles": [
+        {
+          "path": "frontend/js/ui_controller.js",
+          "type": "CREATE",
+          "description": "Interactive dashboard controls and user interface management"
+        },
+        {
+          "path": "frontend/css/components.css",
+          "type": "TO_MODIFY",
+          "description": "Control button styles and visual feedback states"
+        },
+        {
+          "path": "frontend/index.html",
+          "type": "TO_MODIFY",
+          "description": "Interactive control elements and data display panels"
+        }
+      ],
+      "implementationGuide": "Implement ui_controller.js with DashboardController class managing interactive elements. Create toggle buttons for actuators with visual state feedback (active/inactive styles). Implement data display panels showing current temperature, moisture, time, and ML prediction. Create alert system for critical moisture levels (<30%) with visual indicators and notifications. Include sprinkler visual effects (water animation) when active. Ensure all controls are keyboard accessible and responsive.",
+      "verificationCriteria": "Actuator controls successfully update Firebase database. Visual feedback clearly indicates active/inactive states. Data displays update in real-time with telemetry. Alert system activates at proper thresholds. Sprinkler visual effects display when active. Controls are keyboard accessible and responsive. User interactions provide immediate visual feedback.",
+      "analysisResult": "Smart Green IoT Farm Simulation - Reorganized into balanced TDD approach with two backend developers (Physics/ML + Communication/Integration) and one frontend developer, following test-driven development methodology for improved code quality and balanced workload distribution."
+    },
+    {
+      "id": "ec52518f-b59f-45f2-8b4c-58f6fcb8e28f",
+      "name": "Integrate Frontend Application Coordination",
+      "description": "Develop the main application coordinator that initializes all frontend modules, manages application state, and coordinates data flow between MQTT, Firebase, and UI components.",
+      "notes": "Central coordination component ensuring smooth operation of all frontend systems. Critical for application reliability and user experience.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "bfe26de5-ebff-4a95-952c-9f746f603532"
+        },
+        {
+          "taskId": "d5d95644-8d8a-4f4e-a60f-362379f111ea"
+        }
+      ],
+      "createdAt": "2025-12-12T17:01:26.702Z",
+      "updatedAt": "2025-12-12T17:01:26.702Z",
+      "relatedFiles": [
+        {
+          "path": "frontend/js/main.js",
+          "type": "TO_MODIFY",
+          "description": "Application coordinator integrating all frontend modules"
+        },
+        {
+          "path": "frontend/js/mqtt_handler.js",
+          "type": "DEPENDENCY",
+          "description": "MQTT telemetry handling"
+        },
+        {
+          "path": "frontend/js/firebase_handler.js",
+          "type": "DEPENDENCY",
+          "description": "Firebase integration"
+        },
+        {
+          "path": "frontend/js/ui_controller.js",
+          "type": "DEPENDENCY",
+          "description": "UI controls management"
+        },
+        {
+          "path": "frontend/js/animations.js",
+          "type": "DEPENDENCY",
+          "description": "Visualization engine"
+        }
+      ],
+      "implementationGuide": "Enhance main.js with AppCoordinator class that initializes all frontend modules in proper sequence. Implement application state management coordinating MQTT telemetry updates with UI refreshes. Create error boundary system preventing component failures from crashing entire application. Add application lifecycle management (startup, shutdown, reconnection). Implement performance monitoring and optimization for smooth 1Hz data updates. Include debugging modes and development tools integration.",
+      "verificationCriteria": "Application successfully initializes all modules in correct order. State management coordinates data flow between components. Error boundaries prevent component failures from system crash. Performance maintains smooth updates with 1Hz telemetry. Application lifecycle properly managed. Development tools and debugging features functional.",
+      "analysisResult": "Smart Green IoT Farm Simulation - Reorganized into balanced TDD approach with two backend developers (Physics/ML + Communication/Integration) and one frontend developer, following test-driven development methodology for improved code quality and balanced workload distribution."
+    },
+    {
+      "id": "576362f4-b1d5-40ac-851a-ce2cfe1178da",
+      "name": "Complete Documentation & Project Setup",
+      "description": "Finalize comprehensive project documentation, setup instructions, development environment configuration, and deployment guides ensuring project accessibility and maintainability.",
+      "notes": "Essential documentation enabling project adoption and maintenance. Must be clear, complete, and accessible to developers and users.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "f59228a0-28d2-46fd-93fd-20bc582ac639"
+        },
+        {
+          "taskId": "ec52518f-b59f-45f2-8b4c-58f6fcb8e28f"
+        }
+      ],
+      "createdAt": "2025-12-12T17:01:26.702Z",
+      "updatedAt": "2025-12-12T17:01:26.702Z",
+      "relatedFiles": [
+        {
+          "path": "README.md",
+          "type": "TO_MODIFY",
+          "description": "Complete project documentation and setup guide"
+        },
+        {
+          "path": "docs/setup-guide.md",
+          "type": "CREATE",
+          "description": "Detailed setup and configuration instructions"
+        },
+        {
+          "path": "docs/troubleshooting.md",
+          "type": "CREATE",
+          "description": "Common issues and solutions guide"
+        },
+        {
+          "path": ".vscode/settings.json",
+          "type": "CREATE",
+          "description": "VS Code workspace configuration"
+        },
+        {
+          "path": ".vscode/extensions.json",
+          "type": "CREATE",
+          "description": "Recommended VS Code extensions"
+        }
+      ],
+      "implementationGuide": "Update README.md with complete project description, setup instructions, architecture overview, and usage examples. Create comprehensive setup guide including Python environment, Firebase configuration, MQTT broker setup, and frontend hosting. Document all configuration options and customization possibilities. Create development environment setup with VS Code configuration, recommended extensions, and debugging setup. Include troubleshooting guide for common issues and deployment checklist.",
+      "verificationCriteria": "README.md provides complete project overview and setup instructions. All documentation is accurate and up-to-date. Setup guide enables successful project installation and configuration. Development environment properly configured with tooling. Troubleshooting guide addresses common issues. Project structure and documentation facilitate easy maintenance and contribution.",
+      "analysisResult": "Smart Green IoT Farm Simulation - Reorganized into balanced TDD approach with two backend developers (Physics/ML + Communication/Integration) and one frontend developer, following test-driven development methodology for improved code quality and balanced workload distribution."
+    },
+    {
+      "id": "68c7d27d-19bc-477b-96ae-59d8677633af",
+      "name": "Implement Time Scaling System with TDD",
+      "description": "Create comprehensive test suite for the time scaling system, then implement TimeManager class that handles the critical 1:6 time ratio (1 real second = 6 virtual minutes) with precise 240-second virtual day cycles starting at 06:00 AM.",
+      "notes": "Foundation component for entire physics system - all other physics calculations depend on accurate time scaling. Must be mathematically precise to ensure 4-minute demo cycles.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "61c2b071-ee06-4bd9-9340-6e7f1715ba58"
+        }
+      ],
+      "createdAt": "2025-12-12T17:05:12.846Z",
+      "updatedAt": "2025-12-12T17:05:12.846Z",
+      "relatedFiles": [
+        {
+          "path": "tests/test_time_scaling.py",
+          "type": "CREATE",
+          "description": "Comprehensive time scaling test suite (write first)"
+        },
+        {
+          "path": "backend/time_manager.py",
+          "type": "CREATE",
+          "description": "Time scaling implementation with 1:6 ratio precision"
+        },
+        {
+          "path": "backend/config.py",
+          "type": "TO_MODIFY",
+          "description": "Time scaling constants and parameters"
+        }
+      ],
+      "implementationGuide": "Write test_time_scaling.py first with test cases for: 1:6 scaling ratio validation across multiple time periods, virtual day cycle completion in exactly 240 real seconds, start time at 06:00 AM virtual time, time conversion functions (real to virtual, virtual to real), virtual hour calculations (should be 10 real seconds), day boundary detection and reset logic. Then implement TimeManager class with methods: get_virtual_time(), get_day_progress(), is_new_day(), convert_real_to_virtual(), get_virtual_hour(), get_virtual_minute(). Include edge cases like time wraparound and leap calculations.",
+      "verificationCriteria": "All time scaling tests pass with mathematical precision. 1:6 ratio maintained across all time periods. Virtual day completes in exactly 240 real seconds. Start time consistently at 06:00 AM. Time conversion functions accurate within millisecond precision. Day boundary detection works correctly. Virtual hour calculations align with 10-second intervals.",
+      "analysisResult": "Physics Engine and ML Prediction System split into 9 granular TDD tasks covering all documented requirements: time scaling (1:6 ratio), temperature model (sinusoidal), moisture dynamics (evaporation/heat stress), day/night cycles, ML buffer management, Linear Regression training, prediction logic, and full system integration with comprehensive test coverage."
+    },
+    {
+      "id": "c775ce3a-ff47-4a8e-92ce-9beb74c7d30e",
+      "name": "Develop Temperature Model with TDD",
+      "description": "Create test-driven temperature simulation using sinusoidal curve model with peak at 14:00, realistic noise, and proper boundary validation according to documented mathematical specifications.",
+      "notes": "Critical for moisture evaporation calculations and heat stress detection. Mathematical accuracy essential for realistic simulation behavior.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "68c7d27d-19bc-477b-96ae-59d8677633af"
+        }
+      ],
+      "createdAt": "2025-12-12T17:05:12.846Z",
+      "updatedAt": "2025-12-12T17:05:12.846Z",
+      "relatedFiles": [
+        {
+          "path": "tests/test_temperature.py",
+          "type": "CREATE",
+          "description": "Temperature model test suite with mathematical validation"
+        },
+        {
+          "path": "backend/temperature_model.py",
+          "type": "CREATE",
+          "description": "Sinusoidal temperature implementation"
+        },
+        {
+          "path": "backend/config.py",
+          "type": "TO_MODIFY",
+          "description": "Temperature model constants (base, amplitude, noise)"
+        }
+      ],
+      "implementationGuide": "Write test_temperature.py first with test cases for: sinusoidal curve T = 20 + 10*sin(time_offset) validation at multiple time points, peak temperature at exactly 14:00 (2 PM), temperature range 10°C to 30°C baseline, random noise ±1.0°C bounds, temperature progression throughout virtual day, edge cases at day boundaries. Then implement TemperatureModel class with methods: get_temperature(virtual_hour, virtual_minute), calculate_base_temperature(), apply_noise(), validate_temperature_bounds(). Include proper mathematical time offset calculations for sinusoidal function.",
+      "verificationCriteria": "Temperature follows exact sinusoidal curve within tolerance. Peak occurs precisely at 14:00 virtual time. Temperature range stays within 10-30°C baseline bounds. Noise application stays within ±1.0°C limits. Temperature progression is smooth and realistic throughout day cycle. Mathematical calculations are accurate and reproducible.",
+      "analysisResult": "Physics Engine and ML Prediction System split into 9 granular TDD tasks covering all documented requirements: time scaling (1:6 ratio), temperature model (sinusoidal), moisture dynamics (evaporation/heat stress), day/night cycles, ML buffer management, Linear Regression training, prediction logic, and full system integration with comprehensive test coverage."
+    },
+    {
+      "id": "7567eac2-2eda-47d4-ae02-d5cfacc246a2",
+      "name": "Create Moisture Dynamics System with TDD",
+      "description": "Implement comprehensive moisture simulation with base evaporation, heat stress multiplier, sprinkler effects, and boundary clamping using test-driven approach with extensive edge case coverage.",
+      "notes": "Core feedback loop component - determines plant health states and triggers ML predictions. Heat stress detection at 35°C critical for diagnostic logic.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "c775ce3a-ff47-4a8e-92ce-9beb74c7d30e"
+        }
+      ],
+      "createdAt": "2025-12-12T17:05:12.846Z",
+      "updatedAt": "2025-12-12T17:05:12.846Z",
+      "relatedFiles": [
+        {
+          "path": "tests/test_moisture.py",
+          "type": "CREATE",
+          "description": "Comprehensive moisture dynamics test suite"
+        },
+        {
+          "path": "backend/moisture_system.py",
+          "type": "CREATE",
+          "description": "Moisture simulation with all documented rules"
+        },
+        {
+          "path": "backend/config.py",
+          "type": "TO_MODIFY",
+          "description": "Moisture constants (evaporation rates, thresholds)"
+        }
+      ],
+      "implementationGuide": "Write test_moisture.py first with test cases for: base evaporation rate 0.5% per tick validation, heat stress multiplier (2x evaporation when temperature >35°C), sprinkler activation effects (+3% per tick), moisture clamping between 0-100%, boundary conditions (0% and 100% moisture), rapid moisture changes, temperature threshold detection (35°C trigger), combined effects (evaporation + sprinkler simultaneously). Then implement MoistureSystem class with methods: update_moisture(), calculate_evaporation_rate(), apply_heat_stress(), apply_sprinkler_effect(), clamp_moisture(), get_moisture_level(), is_critical_level().",
+      "verificationCriteria": "Base evaporation operates at exact 0.5% per tick. Heat stress multiplier activates precisely at >35°C. Sprinkler effect adds exactly 3% per tick. Moisture properly clamped to 0-100% range. All boundary conditions handled correctly. Combined effects (multiple factors) calculated accurately. Critical level detection works at 30% threshold.",
+      "analysisResult": "Physics Engine and ML Prediction System split into 9 granular TDD tasks covering all documented requirements: time scaling (1:6 ratio), temperature model (sinusoidal), moisture dynamics (evaporation/heat stress), day/night cycles, ML buffer management, Linear Regression training, prediction logic, and full system integration with comprehensive test coverage."
+    },
+    {
+      "id": "5f9b04b1-aa9e-44d5-8b18-897beeb9c5c4",
+      "name": "Implement Day/Night Cycle with TDD",
+      "description": "Create day/night cycle system with precise timing, light intensity calculations, and proper transitions using test-driven development with focus on exact timing specifications.",
+      "notes": "Drives frontend sky animations and affects evaporation rates. Day_progress percentage critical for smooth sun movement visualization.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "68c7d27d-19bc-477b-96ae-59d8677633af"
+        }
+      ],
+      "createdAt": "2025-12-12T17:05:12.846Z",
+      "updatedAt": "2025-12-12T17:05:12.846Z",
+      "relatedFiles": [
+        {
+          "path": "tests/test_daynight.py",
+          "type": "CREATE",
+          "description": "Day/night cycle test suite with timing validation"
+        },
+        {
+          "path": "backend/daynight_cycle.py",
+          "type": "CREATE",
+          "description": "Day/night cycle with precise timing logic"
+        },
+        {
+          "path": "backend/config.py",
+          "type": "TO_MODIFY",
+          "description": "Day/night timing constants and light levels"
+        }
+      ],
+      "implementationGuide": "Write test_daynight.py first with test cases for: day period 06:00-18:00 validation, night period 18:00-06:00 validation, is_day boolean logic at transition points, light intensity calculations (high during day, low at night), day_progress percentage (0-100%) accuracy, transition timing precision, edge cases at 06:00 and 18:00 boundaries, continuous day_progress calculation. Then implement DayNightCycle class with methods: is_day_time(), get_light_intensity(), get_day_progress(), calculate_sun_position(), is_transition_time().",
+      "verificationCriteria": "Day period exactly 06:00-18:00, night period 18:00-06:00. Light intensity changes appropriately between periods. Day_progress calculation accurate to percentage precision. Transition timing precise at boundary hours. Boolean day/night logic correct at all time points. Sun position calculations support smooth frontend animations.",
+      "analysisResult": "Physics Engine and ML Prediction System split into 9 granular TDD tasks covering all documented requirements: time scaling (1:6 ratio), temperature model (sinusoidal), moisture dynamics (evaporation/heat stress), day/night cycles, ML buffer management, Linear Regression training, prediction logic, and full system integration with comprehensive test coverage."
+    },
+    {
+      "id": "9f16c2a8-a40b-460d-b441-a28bff65b5c1",
+      "name": "Integrate Physics Engine Components with TDD",
+      "description": "Combine all physics components into unified PhysicsEngine class using test-driven approach, ensuring proper coordination, timing, and data flow between time, temperature, moisture, and day/night systems.",
+      "notes": "Master physics coordinator that orchestrates all environmental calculations. Critical for maintaining simulation consistency and timing accuracy.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "7567eac2-2eda-47d4-ae02-d5cfacc246a2"
+        },
+        {
+          "taskId": "5f9b04b1-aa9e-44d5-8b18-897beeb9c5c4"
+        }
+      ],
+      "createdAt": "2025-12-12T17:05:12.846Z",
+      "updatedAt": "2025-12-12T17:05:12.846Z",
+      "relatedFiles": [
+        {
+          "path": "tests/test_physics_integration.py",
+          "type": "CREATE",
+          "description": "Physics engine integration test suite"
+        },
+        {
+          "path": "backend/physics_engine.py",
+          "type": "CREATE",
+          "description": "Unified physics engine coordinator"
+        },
+        {
+          "path": "backend/time_manager.py",
+          "type": "DEPENDENCY",
+          "description": "Time scaling system"
+        },
+        {
+          "path": "backend/temperature_model.py",
+          "type": "DEPENDENCY",
+          "description": "Temperature calculations"
+        },
+        {
+          "path": "backend/moisture_system.py",
+          "type": "DEPENDENCY",
+          "description": "Moisture dynamics"
+        },
+        {
+          "path": "backend/daynight_cycle.py",
+          "type": "DEPENDENCY",
+          "description": "Day/night cycle management"
+        }
+      ],
+      "implementationGuide": "Write test_physics_integration.py first with test cases for: complete physics simulation loop, component coordination validation, data flow between systems (time→temperature→moisture), physics state consistency, simulation step execution, environmental state calculations, plant health determination, system reset functionality, performance validation for 1Hz operation. Then implement PhysicsEngine class with methods: step_simulation(), get_environmental_state(), get_plant_health(), reset_simulation(), calculate_physics_tick(), integrate_all_systems(). Ensure proper initialization and cleanup.",
+      "verificationCriteria": "All physics components work together seamlessly. Simulation step maintains 1Hz timing accuracy. Environmental state calculations are consistent and accurate. Plant health determination follows documented thresholds. System integration handles all edge cases. Performance meets real-time requirements. Data flow between components validated end-to-end.",
+      "analysisResult": "Physics Engine and ML Prediction System split into 9 granular TDD tasks covering all documented requirements: time scaling (1:6 ratio), temperature model (sinusoidal), moisture dynamics (evaporation/heat stress), day/night cycles, ML buffer management, Linear Regression training, prediction logic, and full system integration with comprehensive test coverage."
+    },
+    {
+      "id": "870639d8-2825-4f53-a02c-ae116dd1b531",
+      "name": "Create ML Data Buffer Management with TDD",
+      "description": "Implement rolling data buffer system for ML training using test-driven development, focusing on memory management, day boundary resets, and proper data structure maintenance for time-series analysis.",
+      "notes": "Foundation for ML predictions - must handle continuous data accumulation without memory leaks. Day boundary resets prevent unbounded growth over multiple cycles.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "61c2b071-ee06-4bd9-9340-6e7f1715ba58"
+        }
+      ],
+      "createdAt": "2025-12-12T17:05:12.846Z",
+      "updatedAt": "2025-12-12T17:05:12.846Z",
+      "relatedFiles": [
+        {
+          "path": "tests/test_ml_buffer.py",
+          "type": "CREATE",
+          "description": "ML data buffer management test suite"
+        },
+        {
+          "path": "backend/ml_data_buffer.py",
+          "type": "CREATE",
+          "description": "Rolling buffer for time-series ML data"
+        },
+        {
+          "path": "backend/config.py",
+          "type": "TO_MODIFY",
+          "description": "ML buffer size limits and reset parameters"
+        }
+      ],
+      "implementationGuide": "Write test_ml_buffer.py first with test cases for: rolling buffer initialization, data point addition (time_index, moisture_level) validation, buffer size limits and overflow handling, day boundary reset functionality, data structure integrity, memory usage bounds, buffer state queries, data retrieval for training, edge cases (empty buffer, single data point), concurrent access safety. Then implement MLDataBuffer class with methods: add_data_point(), get_training_data(), reset_buffer(), is_buffer_ready(), get_buffer_size(), clear_old_data(), validate_data_structure().",
+      "verificationCriteria": "Rolling buffer maintains proper size limits. Data points stored with correct structure (time_index, moisture_level). Day boundary resets work automatically. Memory usage stays bounded over extended operation. Buffer state queries return accurate information. Data structure integrity maintained throughout operations. Edge cases handled gracefully.",
+      "analysisResult": "Physics Engine and ML Prediction System split into 9 granular TDD tasks covering all documented requirements: time scaling (1:6 ratio), temperature model (sinusoidal), moisture dynamics (evaporation/heat stress), day/night cycles, ML buffer management, Linear Regression training, prediction logic, and full system integration with comprehensive test coverage."
+    },
+    {
+      "id": "2a13fa32-bc85-4884-9e35-3a29642af634",
+      "name": "Develop ML Training Engine with TDD",
+      "description": "Create Linear Regression training system using test-driven development with synthetic datasets, focusing on model accuracy, retraining logic, and performance validation according to scikit-learn specifications.",
+      "notes": "Core ML component using scikit-learn LinearRegression. Must handle real-world data variations and provide reliable training with limited data points typical of IoT scenarios.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "870639d8-2825-4f53-a02c-ae116dd1b531"
+        }
+      ],
+      "createdAt": "2025-12-12T17:05:12.846Z",
+      "updatedAt": "2025-12-12T17:05:12.846Z",
+      "relatedFiles": [
+        {
+          "path": "tests/test_ml_training.py",
+          "type": "CREATE",
+          "description": "ML training engine with synthetic test datasets"
+        },
+        {
+          "path": "backend/ml_training_engine.py",
+          "type": "CREATE",
+          "description": "Linear Regression training implementation"
+        },
+        {
+          "path": "backend/config.py",
+          "type": "TO_MODIFY",
+          "description": "ML training parameters and thresholds"
+        }
+      ],
+      "implementationGuide": "Write test_ml_training.py first with synthetic datasets of known moisture decline patterns, test cases for: Linear Regression model initialization, training with time-series data validation, model accuracy with known datasets, retraining every virtual hour (10 real seconds) timing, prediction accuracy validation, edge cases (insufficient data points, flat curves, rapid changes), model performance metrics, memory usage during training. Then implement MLTrainingEngine class with methods: train_model(), validate_model(), is_training_ready(), get_model_accuracy(), retrain_if_needed(), handle_insufficient_data().",
+      "verificationCriteria": "Linear Regression model trains successfully with time-series data. Training accuracy validated with synthetic datasets. Retraining occurs exactly every virtual hour. Model handles insufficient data gracefully. Edge cases (flat curves, anomalies) managed appropriately. Performance metrics within acceptable bounds. Memory usage optimal during training operations.",
+      "analysisResult": "Physics Engine and ML Prediction System split into 9 granular TDD tasks covering all documented requirements: time scaling (1:6 ratio), temperature model (sinusoidal), moisture dynamics (evaporation/heat stress), day/night cycles, ML buffer management, Linear Regression training, prediction logic, and full system integration with comprehensive test coverage."
+    },
+    {
+      "id": "2bff2b46-9a45-4a69-9b27-16305211b699",
+      "name": "Implement ML Prediction Logic with TDD",
+      "description": "Create moisture prediction system using test-driven development to forecast when soil moisture will reach 30% critical threshold, with proper output formatting and comprehensive edge case handling.",
+      "notes": "User-facing ML prediction feature - output displayed prominently on dashboard. Must provide meaningful, accurate predictions even with limited IoT data scenarios.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "2a13fa32-bc85-4884-9e35-3a29642af634"
+        }
+      ],
+      "createdAt": "2025-12-12T17:05:12.846Z",
+      "updatedAt": "2025-12-12T17:05:12.846Z",
+      "relatedFiles": [
+        {
+          "path": "tests/test_ml_prediction.py",
+          "type": "CREATE",
+          "description": "ML prediction logic with accuracy validation"
+        },
+        {
+          "path": "backend/ml_predictor_logic.py",
+          "type": "CREATE",
+          "description": "Moisture prediction and formatting implementation"
+        },
+        {
+          "path": "backend/config.py",
+          "type": "TO_MODIFY",
+          "description": "Prediction thresholds and formatting parameters"
+        }
+      ],
+      "implementationGuide": "Write test_ml_prediction.py first with test cases for: critical threshold prediction (30% moisture), time-to-dry calculation accuracy, prediction output formatting ('Xh Ym' strings), extrapolation from current moisture trends, prediction validation with known decline curves, edge cases (no decline, rapid changes, insufficient data), boundary conditions (already at critical level), prediction reliability metrics. Then implement MLPredictor class with methods: predict_time_to_dry(), format_prediction_output(), validate_prediction(), extrapolate_moisture_trend(), handle_prediction_edge_cases().",
+      "verificationCriteria": "Predictions accurately forecast 30% moisture threshold timing. Output format exactly matches 'Xh Ym' specification. Edge cases handled with appropriate fallback messages. Prediction reliability validated with test datasets. Extrapolation logic works with various moisture decline patterns. Boundary conditions managed correctly.",
+      "analysisResult": "Physics Engine and ML Prediction System split into 9 granular TDD tasks covering all documented requirements: time scaling (1:6 ratio), temperature model (sinusoidal), moisture dynamics (evaporation/heat stress), day/night cycles, ML buffer management, Linear Regression training, prediction logic, and full system integration with comprehensive test coverage."
+    },
+    {
+      "id": "e6d0e033-bd5f-4f41-b287-a8ea0cb2abd6",
+      "name": "Integrate Complete ML System with TDD",
+      "description": "Combine all ML components into unified MLPredictor system using test-driven approach, ensuring proper coordination between buffer management, training, and prediction with virtual hour timing integration.",
+      "notes": "Master ML coordinator that manages entire prediction pipeline. Must integrate seamlessly with physics engine timing and provide reliable predictions for dashboard display.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "2bff2b46-9a45-4a69-9b27-16305211b699"
+        },
+        {
+          "taskId": "9f16c2a8-a40b-460d-b441-a28bff65b5c1"
+        }
+      ],
+      "createdAt": "2025-12-12T17:05:12.846Z",
+      "updatedAt": "2025-12-12T17:05:12.846Z",
+      "relatedFiles": [
+        {
+          "path": "tests/test_ml_integration.py",
+          "type": "CREATE",
+          "description": "Complete ML system integration test suite"
+        },
+        {
+          "path": "backend/ml_predictor.py",
+          "type": "CREATE",
+          "description": "Unified ML prediction system coordinator"
+        },
+        {
+          "path": "backend/ml_data_buffer.py",
+          "type": "DEPENDENCY",
+          "description": "Data buffer management"
+        },
+        {
+          "path": "backend/ml_training_engine.py",
+          "type": "DEPENDENCY",
+          "description": "Training engine"
+        },
+        {
+          "path": "backend/ml_predictor_logic.py",
+          "type": "DEPENDENCY",
+          "description": "Prediction logic"
+        }
+      ],
+      "implementationGuide": "Write test_ml_integration.py first with test cases for: complete ML pipeline operation, virtual hour retraining coordination, buffer-to-training-to-prediction data flow, system state management, ML system lifecycle (startup, operation, reset), integration with physics time system, performance under continuous operation, memory management across full cycles, error handling throughout pipeline. Then implement MLPredictor class with methods: update_system(), get_prediction(), should_retrain(), reset_ml_system(), get_system_status(), integrate_with_physics().",
+      "verificationCriteria": "Complete ML pipeline operates seamlessly from data collection to prediction output. Virtual hour retraining timing synchronized with physics engine. System state management handles all operational scenarios. Memory usage optimized across full system lifecycle. Error handling prevents ML failures from affecting overall simulation. Integration with physics timing accurate and reliable.",
+      "analysisResult": "Physics Engine and ML Prediction System split into 9 granular TDD tasks covering all documented requirements: time scaling (1:6 ratio), temperature model (sinusoidal), moisture dynamics (evaporation/heat stress), day/night cycles, ML buffer management, Linear Regression training, prediction logic, and full system integration with comprehensive test coverage."
+    },
+    {
+      "id": "e9c1f3ed-c23d-4dce-b2c9-754c52f2be99",
+      "name": "Create MQTT Connection Management with TDD",
+      "description": "Implement robust MQTT client connection system using test-driven development with mock broker testing, focusing on connection establishment, authentication, and network resilience for public broker integration.",
+      "notes": "Foundation for all MQTT operations - must handle public broker connectivity reliably. Connection stability critical for real-time telemetry streaming.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "61c2b071-ee06-4bd9-9340-6e7f1715ba58"
+        }
+      ],
+      "createdAt": "2025-12-12T17:08:56.032Z",
+      "updatedAt": "2025-12-12T17:08:56.032Z",
+      "relatedFiles": [
+        {
+          "path": "tests/test_mqtt_connection.py",
+          "type": "CREATE",
+          "description": "MQTT connection management test suite with mock broker"
+        },
+        {
+          "path": "backend/mqtt_connection_manager.py",
+          "type": "CREATE",
+          "description": "MQTT connection handling implementation"
+        },
+        {
+          "path": "backend/config.py",
+          "type": "TO_MODIFY",
+          "description": "MQTT broker configuration (host, port, credentials)"
+        }
+      ],
+      "implementationGuide": "Write test_mqtt_connection.py first with test cases for: connection to public broker (broker.hivemq.com or test.mosquitto.org), port 1883 TCP connection validation, connection state management (connected/disconnected/connecting), authentication handling, connection retry logic with exponential backoff, network failure simulation, graceful disconnect procedures, connection status callbacks. Then implement MQTTConnectionManager class with methods: connect(), disconnect(), is_connected(), get_connection_status(), retry_connection(), handle_connection_lost(), setup_connection_callbacks().",
+      "verificationCriteria": "Connection establishes successfully to public broker. Connection retry logic handles network failures with exponential backoff. Connection status accurately reflects actual broker connectivity. Authentication works with broker requirements. Graceful disconnect prevents connection leaks. Mock broker testing covers all connection scenarios.",
+      "analysisResult": "MQTT and Firebase communication tasks split into 8 granular TDD components covering connection management, payload schemas, publishing engines, authentication, actuator synchronization, historical logging, and system integration based on detailed documentation specifications."
+    },
+    {
+      "id": "cd3a3a94-15ba-4540-9f12-742d1c4faa69",
+      "name": "Implement MQTT Payload Schema with TDD",
+      "description": "Create JSON telemetry payload system using test-driven development with exact schema validation according to documented data contracts, ensuring frontend compatibility and data integrity.",
+      "notes": "Critical data contract ensuring frontend compatibility - exact schema match required. Payload structure drives all dashboard visualizations and must be precisely formatted.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "61c2b071-ee06-4bd9-9340-6e7f1715ba58"
+        }
+      ],
+      "createdAt": "2025-12-12T17:08:56.032Z",
+      "updatedAt": "2025-12-12T17:08:56.032Z",
+      "relatedFiles": [
+        {
+          "path": "tests/test_mqtt_payload.py",
+          "type": "CREATE",
+          "description": "MQTT payload schema validation test suite"
+        },
+        {
+          "path": "backend/mqtt_payload_manager.py",
+          "type": "CREATE",
+          "description": "JSON payload creation and validation implementation"
+        },
+        {
+          "path": "backend/config.py",
+          "type": "TO_MODIFY",
+          "description": "MQTT payload schema constants and field definitions"
+        }
+      ],
+      "implementationGuide": "Write test_mqtt_payload.py first with test cases for: exact JSON schema validation matching documented structure (moisture, temperature, light_intensity, hour, minute, time_str, day_progress, is_day, prediction, sprinkler_on), data type validation (floats, integers, booleans, strings), payload serialization/deserialization, schema version compatibility, payload size limits, malformed data handling, field boundary validation. Then implement MQTTPayloadManager class with methods: create_payload(), validate_payload(), serialize_to_json(), get_schema_version(), validate_field_types(), handle_payload_errors().",
+      "verificationCriteria": "Payload matches documented JSON schema exactly. All data types validated correctly (moisture: float 0-100, temperature: float, hour: int 0-23, etc.). Serialization produces valid JSON. Schema validation catches malformed data. Field boundary validation prevents invalid values. Payload size stays within MQTT limits.",
+      "analysisResult": "MQTT and Firebase communication tasks split into 8 granular TDD components covering connection management, payload schemas, publishing engines, authentication, actuator synchronization, historical logging, and system integration based on detailed documentation specifications."
+    },
+    {
+      "id": "87887a26-0228-4a47-bdb6-60cec48c4182",
+      "name": "Develop MQTT Publishing Engine with TDD",
+      "description": "Create precise 1Hz telemetry broadcasting system using test-driven development with timing accuracy, topic management, and publish confirmation handling according to documented specifications.",
+      "notes": "Real-time telemetry engine - timing accuracy essential for smooth frontend animations. Must maintain exact 1Hz rate for dashboard synchronization.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "e9c1f3ed-c23d-4dce-b2c9-754c52f2be99"
+        },
+        {
+          "taskId": "cd3a3a94-15ba-4540-9f12-742d1c4faa69"
+        }
+      ],
+      "createdAt": "2025-12-12T17:08:56.032Z",
+      "updatedAt": "2025-12-12T17:08:56.032Z",
+      "relatedFiles": [
+        {
+          "path": "tests/test_mqtt_publishing.py",
+          "type": "CREATE",
+          "description": "MQTT publishing timing and reliability test suite"
+        },
+        {
+          "path": "backend/mqtt_publisher.py",
+          "type": "CREATE",
+          "description": "1Hz telemetry broadcasting implementation"
+        },
+        {
+          "path": "backend/config.py",
+          "type": "TO_MODIFY",
+          "description": "Publishing frequency and topic configuration"
+        }
+      ],
+      "implementationGuide": "Write test_mqtt_publishing.py first with test cases for: 1Hz publishing frequency validation (exactly every 1.0 seconds), topic publishing to 'cs335/bese13ab/sensor_data', QoS level handling, publish confirmation callbacks, message ordering preservation, publishing failure handling, timing drift correction, publish queue management for network delays. Then implement MQTTPublisher class with methods: start_publishing(), stop_publishing(), publish_telemetry(), set_publish_frequency(), handle_publish_result(), manage_publish_queue(), correct_timing_drift().",
+      "verificationCriteria": "Publishing maintains exactly 1Hz frequency over extended operation. Messages published to correct topic 'cs335/bese13ab/sensor_data'. QoS handling ensures message delivery. Timing drift correction maintains accuracy. Publish failures handled without disrupting simulation. Message ordering preserved during network delays.",
+      "analysisResult": "MQTT and Firebase communication tasks split into 8 granular TDD components covering connection management, payload schemas, publishing engines, authentication, actuator synchronization, historical logging, and system integration based on detailed documentation specifications."
+    },
+    {
+      "id": "887481e0-4283-4230-bf91-7a1ee836258a",
+      "name": "Integrate Complete MQTT Client with TDD",
+      "description": "Combine all MQTT components into unified client system using test-driven development with error isolation, lifecycle management, and integration with physics engine timing coordination.",
+      "notes": "Master MQTT coordinator ensuring reliable telemetry streaming. Must integrate seamlessly with physics engine while maintaining error isolation and system stability.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "87887a26-0228-4a47-bdb6-60cec48c4182"
+        }
+      ],
+      "createdAt": "2025-12-12T17:08:56.032Z",
+      "updatedAt": "2025-12-12T17:08:56.032Z",
+      "relatedFiles": [
+        {
+          "path": "tests/test_mqtt_integration.py",
+          "type": "CREATE",
+          "description": "Complete MQTT client integration test suite"
+        },
+        {
+          "path": "backend/mqtt_client.py",
+          "type": "CREATE",
+          "description": "Unified MQTT client system coordinator"
+        },
+        {
+          "path": "backend/mqtt_connection_manager.py",
+          "type": "DEPENDENCY",
+          "description": "Connection management component"
+        },
+        {
+          "path": "backend/mqtt_payload_manager.py",
+          "type": "DEPENDENCY",
+          "description": "Payload handling component"
+        },
+        {
+          "path": "backend/mqtt_publisher.py",
+          "type": "DEPENDENCY",
+          "description": "Publishing engine component"
+        }
+      ],
+      "implementationGuide": "Write test_mqtt_integration.py first with test cases for: complete MQTT client lifecycle (startup, operation, shutdown), component coordination (connection + payload + publishing), physics engine integration for data source, error isolation (connection failures don't stop publishing queue), performance under continuous operation, memory usage validation, reconnection scenarios with queued messages, client state management throughout system lifecycle. Then implement MQTTClient class with methods: initialize_client(), start_client(), stop_client(), publish_physics_data(), handle_client_errors(), get_client_status(), integrate_with_physics().",
+      "verificationCriteria": "Complete MQTT system operates reliably with physics integration. Error isolation prevents component failures from system crash. Client lifecycle properly managed (startup/shutdown). Performance maintains 1Hz telemetry over extended operation. Memory usage stays bounded. Reconnection scenarios handled gracefully with message queue management.",
+      "analysisResult": "MQTT and Firebase communication tasks split into 8 granular TDD components covering connection management, payload schemas, publishing engines, authentication, actuator synchronization, historical logging, and system integration based on detailed documentation specifications."
+    },
+    {
+      "id": "4b25ba52-83b9-4ddb-a66b-3d24b7b155fa",
+      "name": "Create Firebase Authentication & Connection with TDD",
+      "description": "Implement Firebase Realtime Database authentication and connection management using test-driven development with service account credentials, security rules, and connection resilience.",
+      "notes": "Foundation for all Firebase operations - authentication must be secure and reliable. Service account setup required before development begins.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "61c2b071-ee06-4bd9-9340-6e7f1715ba58"
+        }
+      ],
+      "createdAt": "2025-12-12T17:08:56.032Z",
+      "updatedAt": "2025-12-12T17:08:56.032Z",
+      "relatedFiles": [
+        {
+          "path": "tests/test_firebase_auth.py",
+          "type": "CREATE",
+          "description": "Firebase authentication and connection test suite"
+        },
+        {
+          "path": "backend/firebase_auth_manager.py",
+          "type": "CREATE",
+          "description": "Firebase authentication implementation"
+        },
+        {
+          "path": "backend/config.py",
+          "type": "TO_MODIFY",
+          "description": "Firebase project configuration and credentials path"
+        }
+      ],
+      "implementationGuide": "Write test_firebase_auth.py first with test cases for: service account authentication validation, Firebase project connection establishment, database URL configuration, authentication token management, connection status monitoring, authentication failure handling, security rules compliance, connection retry logic, credential validation. Then implement FirebaseAuthManager class with methods: authenticate_service_account(), establish_connection(), validate_credentials(), refresh_authentication(), monitor_connection_status(), handle_auth_errors(), get_database_reference().",
+      "verificationCriteria": "Service account authentication successful with proper credentials. Database connection established to correct Firebase project. Authentication tokens managed and refreshed appropriately. Connection status accurately monitored. Authentication failures handled gracefully. Security rules compliance validated.",
+      "analysisResult": "MQTT and Firebase communication tasks split into 8 granular TDD components covering connection management, payload schemas, publishing engines, authentication, actuator synchronization, historical logging, and system integration based on detailed documentation specifications."
+    },
+    {
+      "id": "a7305734-e19d-4cf2-83ce-2f4f1de11935",
+      "name": "Implement Firebase Actuator State Management with TDD",
+      "description": "Create bidirectional actuator state synchronization using test-driven development with real-time listeners, state validation, and proper database structure according to documented schema.",
+      "notes": "Critical control interface enabling user interaction with simulation. Real-time listeners must respond immediately to dashboard commands for responsive user experience.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "4b25ba52-83b9-4ddb-a66b-3d24b7b155fa"
+        }
+      ],
+      "createdAt": "2025-12-12T17:08:56.032Z",
+      "updatedAt": "2025-12-12T17:08:56.032Z",
+      "relatedFiles": [
+        {
+          "path": "tests/test_firebase_actuators.py",
+          "type": "CREATE",
+          "description": "Firebase actuator state management test suite"
+        },
+        {
+          "path": "backend/firebase_actuator_manager.py",
+          "type": "CREATE",
+          "description": "Actuator state synchronization implementation"
+        },
+        {
+          "path": "backend/config.py",
+          "type": "TO_MODIFY",
+          "description": "Firebase database paths for actuator states"
+        }
+      ],
+      "implementationGuide": "Write test_firebase_actuators.py first with test cases for: actuator state reading from 'plant_monitor/actuators/' branch, real-time listener setup for state changes, actuator state validation (sprinkler_state, grow_light_state, fan_state booleans), write confirmation handling, state change notifications, database structure compliance, concurrent access handling, listener error recovery. Then implement FirebaseActuatorManager class with methods: read_actuator_states(), setup_state_listeners(), validate_actuator_data(), handle_state_changes(), get_sprinkler_state(), get_light_state(), get_fan_state(), cleanup_listeners().",
+      "verificationCriteria": "Actuator states read correctly from 'plant_monitor/actuators/' database branch. Real-time listeners respond immediately to state changes. Actuator data validated as proper boolean values. Database structure matches documented schema exactly. State change notifications trigger appropriate simulation responses. Concurrent access handled safely.",
+      "analysisResult": "MQTT and Firebase communication tasks split into 8 granular TDD components covering connection management, payload schemas, publishing engines, authentication, actuator synchronization, historical logging, and system integration based on detailed documentation specifications."
+    },
+    {
+      "id": "5a040cd2-86a2-4031-9649-7ce04a7a479d",
+      "name": "Develop Firebase Historical Logging with TDD",
+      "description": "Create historical data logging system using test-driven development with precise timing, data structure compliance, and efficient batch operations for environmental trend analysis.",
+      "notes": "Long-term data persistence for environmental analytics. Timing must synchronize exactly with virtual hour intervals for consistent data collection.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "4b25ba52-83b9-4ddb-a66b-3d24b7b155fa"
+        }
+      ],
+      "createdAt": "2025-12-12T17:08:56.032Z",
+      "updatedAt": "2025-12-12T17:08:56.032Z",
+      "relatedFiles": [
+        {
+          "path": "tests/test_firebase_history.py",
+          "type": "CREATE",
+          "description": "Firebase historical logging test suite"
+        },
+        {
+          "path": "backend/firebase_history_logger.py",
+          "type": "CREATE",
+          "description": "Historical data logging implementation"
+        },
+        {
+          "path": "backend/config.py",
+          "type": "TO_MODIFY",
+          "description": "Historical logging timing and data retention settings"
+        }
+      ],
+      "implementationGuide": "Write test_firebase_history.py first with test cases for: historical log writing to 'plant_monitor/history_log/' branch, unique push ID generation, data structure validation (time, moisture, temperature), virtual hour timing (every 10 real seconds), batch write operations, log entry ordering, data retention management, write failure handling, network interruption recovery. Then implement FirebaseHistoryLogger class with methods: log_environmental_data(), create_history_entry(), batch_write_logs(), validate_log_structure(), manage_data_retention(), handle_write_failures(), sync_with_virtual_time().",
+      "verificationCriteria": "Historical logs written exactly every virtual hour (10 real seconds). Data structure matches documented schema with proper push IDs. Log entries maintain proper ordering and structure. Batch operations optimize database performance. Write failures handled with retry logic. Virtual time synchronization maintains consistent data collection intervals.",
+      "analysisResult": "MQTT and Firebase communication tasks split into 8 granular TDD components covering connection management, payload schemas, publishing engines, authentication, actuator synchronization, historical logging, and system integration based on detailed documentation specifications."
+    },
+    {
+      "id": "9f96692f-27dc-47d0-88bb-d55372201ff7",
+      "name": "Integrate Complete Firebase Client with TDD",
+      "description": "Combine all Firebase components into unified client system using test-driven development with coordinated operations, error handling, and integration with simulation timing systems.",
+      "notes": "Master Firebase coordinator ensuring reliable data persistence and control. Must integrate with simulation timing while maintaining independent error handling for network resilience.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "a7305734-e19d-4cf2-83ce-2f4f1de11935"
+        },
+        {
+          "taskId": "5a040cd2-86a2-4031-9649-7ce04a7a479d"
+        }
+      ],
+      "createdAt": "2025-12-12T17:08:56.032Z",
+      "updatedAt": "2025-12-12T17:08:56.032Z",
+      "relatedFiles": [
+        {
+          "path": "tests/test_firebase_integration.py",
+          "type": "CREATE",
+          "description": "Complete Firebase client integration test suite"
+        },
+        {
+          "path": "backend/firebase_client.py",
+          "type": "CREATE",
+          "description": "Unified Firebase client system coordinator"
+        },
+        {
+          "path": "backend/firebase_auth_manager.py",
+          "type": "DEPENDENCY",
+          "description": "Authentication management component"
+        },
+        {
+          "path": "backend/firebase_actuator_manager.py",
+          "type": "DEPENDENCY",
+          "description": "Actuator state management"
+        },
+        {
+          "path": "backend/firebase_history_logger.py",
+          "type": "DEPENDENCY",
+          "description": "Historical logging component"
+        }
+      ],
+      "implementationGuide": "Write test_firebase_integration.py first with test cases for: complete Firebase client lifecycle management, coordinated actuator and logging operations, simulation timing integration, error isolation between components, network failure recovery, client state consistency, performance under continuous operation, memory usage optimization, concurrent operation handling. Then implement FirebaseClient class with methods: initialize_firebase(), start_operations(), stop_operations(), coordinate_data_flow(), handle_firebase_errors(), get_client_status(), integrate_with_simulation(), manage_firebase_lifecycle().",
+      "verificationCriteria": "Complete Firebase system operates with coordinated actuator and logging functions. Simulation timing integration maintains proper data collection intervals. Error isolation prevents network issues from affecting simulation. Client lifecycle properly managed throughout system operation. Performance optimized for continuous operation with bounded memory usage.",
+      "analysisResult": "MQTT and Firebase communication tasks split into 8 granular TDD components covering connection management, payload schemas, publishing engines, authentication, actuator synchronization, historical logging, and system integration based on detailed documentation specifications."
+    }
+  ]
+}
