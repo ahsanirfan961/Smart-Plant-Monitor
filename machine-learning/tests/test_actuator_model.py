@@ -132,7 +132,8 @@ class TestActuatorController:
         
         assert len(predictions_df) == 50
         assert list(predictions_df.columns) == ['fan', 'pump', 'light']
-        assert predictions_df.dtypes['fan'] == np.int64
+        # Check dtype is integer type (int32 or int64 depending on platform)
+        assert predictions_df.dtypes['fan'] in [np.int32, np.int64]
     
     def test_missing_features_raises_error(self, trained_controller):
         """Test that missing features raise ValueError"""

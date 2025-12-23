@@ -67,6 +67,9 @@ def demo_actuator_control():
         }
     ]
     
+    # Collect all predictions for tuple output
+    all_predictions = []
+    
     for scenario in scenarios:
         logger.info(f"\nScenario: {scenario['name']}")
         logger.info(f"Inputs: {scenario['data']}")
@@ -79,6 +82,22 @@ def demo_actuator_control():
             conf = decisions_conf[actuator][1]
             status = "ON" if state else "OFF"
             logger.info(f"  {actuator.upper()}: {status} (confidence: {conf:.2%})")
+        
+        # Format as tuple for integration: (scenario_name, inputs, decisions, confidences)
+        tuple_output = (
+            scenario['name'],
+            tuple(scenario['data'].items()),
+            tuple((act, bool(state)) for act, state in decisions.items()),
+            tuple((act, decisions_conf[act][1]) for act in decisions.keys())
+        )
+        all_predictions.append(tuple_output)
+    
+    # Print integration-friendly tuple output
+    logger.info("\n" + "="*60)
+    logger.info("INTEGRATION OUTPUT (TUPLE FORMAT)")
+    logger.info("="*60)
+    for scenario_name, inputs, decisions, confidences in all_predictions:
+        logger.info(f"\n({repr(scenario_name)}, {inputs}, {decisions}, {confidences})")
 
 
 def demo_trend_prediction():
@@ -104,14 +123,23 @@ def demo_trend_prediction():
     logger.info("\n--- 6-Hour Forecast ---\n")
     predictions = predictor.predict_future(current_data, hours_ahead=6)
     
+    # Collect predictions in tuple format
+    predictions_tuples = {}
+    
     for metric, pred_list in predictions.items():
         logger.info(f"\n{metric.upper()} forecast:")
+        metric_predictions = []
+        
         for i in range(min(4, len(pred_list))):  # Show first 4 predictions
             pred = pred_list[i]
             logger.info(
                 f"  {pred['time']}: {pred['value']:.2f} "
                 f"(confidence: {pred['confidence']:.2%})"
             )
+            # Format as tuple: (time, value, confidence)
+            metric_predictions.append((pred['time'], round(pred['value'], 2), round(pred['confidence'], 4)))
+        
+        predictions_tuples[metric] = tuple(metric_predictions)
     
     # Anomaly detection
     logger.info("\n--- Anomaly Detection ---\n")
@@ -127,6 +155,9 @@ def demo_trend_prediction():
     logger.info(f"Testing anomalous data: {anomalous_data}")
     anomalies = predictor.detect_anomalies(anomalous_data, predictions)
     
+    # Collect anomalies in tuple format
+    anomalies_tuples = []
+    
     if anomalies:
         logger.info("Anomalies detected:")
         for anomaly in anomalies:
@@ -137,8 +168,26 @@ def demo_trend_prediction():
                 f"Deviation={anomaly['deviation']:.2f} "
                 f"[{anomaly['severity']}]"
             )
+            # Format as tuple: (metric, current_value, predicted_value, deviation, severity)
+            anomalies_tuples.append((
+                anomaly['metric'],
+                round(anomaly['current_value'], 2),
+                round(anomaly['predicted_value'], 2),
+                round(anomaly['deviation'], 2),
+                anomaly['severity']
+            ))
     else:
         logger.info("No anomalies detected")
+    
+    # Print integration-friendly tuple output
+    logger.info("\n" + "="*60)
+    logger.info("INTEGRATION OUTPUT (TUPLE FORMAT)")
+    logger.info("="*60)
+    logger.info(f"\nCurrent State: {tuple(current_data.items())}")
+    logger.info("\nPredictions:")
+    for metric, pred_tuples in predictions_tuples.items():
+        logger.info(f"  {metric}: {pred_tuples}")
+    logger.info(f"\nAnomalies: {tuple(anomalies_tuples)}")
 
 
 def demo_integrated_system():
@@ -187,13 +236,31 @@ def demo_integrated_system():
     
     logger.info(f"\nPredicted minimum moisture (6h): {min_future_moisture:.1f}%")
     
+    recommendation = None
     if min_future_moisture < 30.0:
         logger.info("⚠️  Recommendation: Activate pump NOW (preventive action)")
         logger.info(f"   Moisture predicted to drop below 30% threshold")
+        recommendation = "ACTIVATE_PUMP_PREVENTIVE"
     elif current_decisions['pump']:
         logger.info("✓  Pump activated based on current readings")
+        recommendation = "PUMP_ACTIVE_CURRENT"
     else:
         logger.info("✓  No watering needed - moisture stable")
+        recommendation = "STABLE_NO_ACTION"
+    
+    # Print integration-friendly tuple output
+    logger.info("\n" + "="*60)
+    logger.info("INTEGRATION OUTPUT (TUPLE FORMAT)")
+    logger.info("="*60)
+    
+    integrated_decision = (
+        tuple(current_state.items()),
+        tuple((act, bool(state)) for act, state in current_decisions.items()),
+        round(min_future_moisture, 2),
+        recommendation
+    )
+    
+    logger.info(f"\n{integrated_decision}")
 
 
 def main():

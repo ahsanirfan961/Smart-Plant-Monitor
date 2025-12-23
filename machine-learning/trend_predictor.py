@@ -261,8 +261,20 @@ class TrendPredictor:
             
             # Calculate deviation
             deviation = abs(value - predicted_value)
-            threshold = predicted_value * 0.15  # 15% threshold
             
+            # Adaptive threshold based on metric type and realistic ranges
+            # Use percentage or absolute value whichever is larger for sensitivity
+            if metric == 'temperature':
+                # ±8°C threshold (realistic daily variation)
+                threshold = max(8.0, abs(value) * 0.15)
+            elif metric == 'light_intensity':
+                # ±35% threshold (light can vary significantly)
+                threshold = max(35.0, abs(value) * 0.40)
+            else:  # humidity, soil_moisture
+                # ±30% threshold (allows for natural variation)
+                threshold = max(30.0, abs(value) * 0.40)
+            
+            # Only flag as anomaly if deviation significantly exceeds threshold
             if deviation > threshold:
                 anomalies.append({
                     'metric': metric,
